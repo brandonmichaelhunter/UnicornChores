@@ -1,0 +1,12 @@
+C:\Users\Brandon\Documents\GitHub\UnicornChores\v.1.0.0\ParentsRules\bin\Release\netcoreapp2.0\ParentsRules.deps.json
+C:\Users\Brandon\Documents\GitHub\UnicornChores\v.1.0.0\ParentsRules\bin\Release\netcoreapp2.0\ParentsRules.runtimeconfig.json
+C:\Users\Brandon\Documents\GitHub\UnicornChores\v.1.0.0\ParentsRules\bin\Release\netcoreapp2.0\ParentsRules.runtimeconfig.dev.json
+C:\Users\Brandon\Documents\GitHub\UnicornChores\v.1.0.0\ParentsRules\bin\Release\netcoreapp2.0\ParentsRules.dll
+C:\Users\Brandon\Documents\GitHub\UnicornChores\v.1.0.0\ParentsRules\bin\Release\netcoreapp2.0\ParentsRules.pdb
+C:\Users\Brandon\Documents\GitHub\UnicornChores\v.1.0.0\ParentsRules\obj\Release\netcoreapp2.0\ParentsRules.csproj.CoreCompileInputs.cache
+C:\Users\Brandon\Documents\GitHub\UnicornChores\v.1.0.0\ParentsRules\obj\Release\netcoreapp2.0\ParentsRules.AssemblyInfoInputs.cache
+C:\Users\Brandon\Documents\GitHub\UnicornChores\v.1.0.0\ParentsRules\obj\Release\netcoreapp2.0\ParentsRules.AssemblyInfo.cs
+C:\Users\Brandon\Documents\GitHub\UnicornChores\v.1.0.0\ParentsRules\obj\Release\netcoreapp2.0\ParentsRules.dll
+C:\Users\Brandon\Documents\GitHub\UnicornChores\v.1.0.0\ParentsRules\obj\Release\netcoreapp2.0\ParentsRules.pdb
+C:\Users\Brandon\Documents\GitHub\UnicornChores\v.1.0.0\ParentsRules\obj\Release\netcoreapp2.0\ParentsRules.csprojResolveAssemblyReference.cache
+C:\Users\Brandon\Documents\GitHub\UnicornChores\v.1.0.0\ParentsRules\obj\Release\netcoreapp2.0\UserSecretsAssemblyInfo.cs

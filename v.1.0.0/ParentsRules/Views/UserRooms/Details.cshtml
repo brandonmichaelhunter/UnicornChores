@@ -1,0 +1,47 @@
+﻿@using ParentsRules.Extensions;
+@using ParentsRules.Data;
+@model ParentsRules.Models.Rooms.UserRooms
+
+@{
+    ViewData["Title"] = "Details";
+}
+@inject ApplicationDbContext _context
+@{
+    string DisplayDateValue = ((Model.DateCreated.HasValue == true) ? Model.DateCreated.Value.ToShortDateString() : "N/A");
+}
+<h2><i>@Html.DisplayFor(model => model.Room)</i> - Details</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Room)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Room)
+        </dd>
+        <dt>
+            Author
+        </dt>
+        <dd>
+            @UserProfileExtensions.GetDisplayName(_context, Model.UserID)
+
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DateCreated)
+        </dt>
+        <dd>
+            @DisplayDateValue;
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IsActive)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ID">Edit Room</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

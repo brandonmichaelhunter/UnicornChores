@@ -1,0 +1,79 @@
+﻿@using ParentsRules.Extensions;
+@using ParentsRules.Data;
+@model IEnumerable<ParentsRules.Models.ChildrenWork>
+
+@{
+    
+}
+@inject ApplicationDbContext _context
+<h2>Pending Completed Chores</h2>
+<hr style="display: block;margin-top: 0.5em;margin-bottom: 0.5em;margin-left: auto;margin-right: auto;border-style: inset;border-width: 1px;">
+<div class="container">
+    <div class="row">
+        <div class="col-sm-2"><a asp-controller="Dashboard" asp-action="AllCompletedChores">Completed Chores</a></div>
+        <div class="col-sm-2"><a asp-controller="Dashboard" asp-action="Index">Return to Dashboard</a></div>
+    </div>
+</div>
+<div class="container">
+    
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Day of the Week</th>
+                    <th>
+
+                        @Html.DisplayNameFor(model => model.Chore)
+                    </th>
+                    <th>
+                        Child
+                    </th>
+                    <th>
+                        Chore Amount
+                    </th>
+                    <th>
+                        Author
+                    </th>
+                    <th>
+                        Chore Completed Date
+                    </th>
+
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model) {
+
+                    string DayName = "";
+                    if(item.Monday) { DayName = "Monday"; }
+                    else if(item.Tuesday) { DayName = "Tuesday"; }
+                    else if (item.Wednesday) { DayName = "Wednesday"; }
+                    else if (item.Thursday) { DayName = "Thursday"; }
+                    else if (item.Friday) { DayName = "Friday"; }
+                    else if (item.Saturday) { DayName = "Saturday"; }
+                    else if (item.Sunday) { DayName = "Sunday"; }
+                        <tr>
+                            <td>@DayName</td>
+                            <td>
+                                @ChoresExtensions.GetChoreName(_context, item.Chore)
+                            </td>
+                            <td>
+                                @ChoresExtensions.GetDisplayName(_context, item.UserID)
+                            </td>
+                            <td>
+                                @item.DollarAmount.ToString("C")
+                            </td>
+                            <td>
+                                @ChoresExtensions.GetDisplayName(_context, item.ParentID)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DateChoreCompleted)
+                            </td>
+                            <td>
+                                <a asp-action="ChoreCompleted" asp-route-id="@item.ID" name="Monday+''+@item.ID">Chore is completed</a>
+                            </td>
+                        </tr>
+                }
+            </tbody>
+        </table>
+   
+    </div>

@@ -1,0 +1,63 @@
+﻿@using ParentsRules.Extensions;
+@using ParentsRules.Data;
+@model ParentsRules.Models.Chroes.UserChores
+
+@{
+    ViewData["Title"] = "Chore Details";
+}
+@inject ApplicationDbContext _context
+<h2>Chore Details</h2>
+<style type="text/css">
+    dt {
+        text-align:left !important;
+    }
+</style>
+<div>
+    <h4>Chore - @ChoresExtensions.GetChoreName(_context, Model.Chore)</h4>
+    <hr />
+    <dl class="dl-horizontal">
+
+        
+        <dt class="text-left">
+           Assigned To
+        </dt>
+        <dd>
+            @ChoresExtensions.GetDisplayName(_context, Model.UserID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RoomID)
+        </dt>
+        <dd>
+            @ChoresExtensions.GetRoomName(_context, Model.RoomID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DollarAmount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DollarAmount)
+        </dd>
+        <dt>
+            Created By
+        </dt>
+        <dd>
+            @ChoresExtensions.GetDisplayName(_context, Model.ParentID)
+        </dd>
+        <dt>
+            Chore Assigned Due Date
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateDue)
+        </dd>
+        <dt>
+            Assigned Days
+        </dt>
+        <dd>
+            <div>Monday: @Html.DisplayFor(modelItem => Model.Monday) &nbsp;Tuesday: @Html.DisplayFor(modelItem => Model.Tuesday)&nbsp;Wednesday: @Html.DisplayFor(modelItem => Model.Wednesday)&nbsp;Thursday: @Html.DisplayFor(modelItem => Model.Thursday)&nbsp;Friday: @Html.DisplayFor(modelItem => Model.Friday)&nbsp;Saturday: @Html.DisplayFor(modelItem => Model.Saturday)&nbsp;Sunday: @Html.DisplayFor(modelItem => Model.Sunday)</div>
+        </dd>
+        
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ID">Edit Chore</a> |
+    <a asp-controller="Dashboard" asp-action="Index">Back to List</a>
+</div>

@@ -1,0 +1,429 @@
+﻿@using ParentsRules.Extensions;
+@using ParentsRules.Data;
+@model IEnumerable<ParentsRules.Models.Chroes.ChoresViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+
+}
+@inject ApplicationDbContext _context
+@{ 
+    double dollarAmount =  (ViewData["DollarAmount"] != null) ? Convert.ToDouble(ViewData["DollarAmount"].ToString()) : 0.00;
+    double giveAmount = Math.Round(dollarAmount * .3, 2);
+    double saveAmount = Math.Round(dollarAmount * .3, 2);
+    double spendAmount = Math.Round(dollarAmount * .3, 2);
+    double titheAmount = Math.Round(dollarAmount * .1, 2);
+}
+<style type="text/css">
+    .LightBackground {
+        background: linear-gradient(141deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%) !important;
+        color: white;
+    }
+    .MondayHeader {
+        background-color: #ff8080;
+        border: 1px solid #ff8080 !important;
+    }
+    .MondayColumns {
+        border: 1px solid #ff8080 !important;
+    }
+
+    .TuesdayHeader {
+        background-color: #ff944d;
+        border: 1px solid #ff944d !important;
+    }
+
+    .TuesdayColumns {
+        border: 1px solid #ff944d !important;
+    }
+    .WednesdayHeader {
+        background-color: #e6e600;
+        border: 1px solid #e6e600 !important;
+    }
+    .WednesdayColumns {
+        border: 1px solid #e6e600 !important;
+    }
+
+    .ThursdayHeader {
+        background-color: #99cc00;
+        border: 1px solid #99cc00 !important;
+    }
+
+    .ThursdayColumns {
+        border: 1px solid #99cc00 !important;
+    }
+
+    .FridayHeader {
+        background-color: #00bfff;
+        border: 1px solid #00bfff !important;
+    }
+
+    .FridayColumns {
+        border: 1px solid #00bfff !important;
+    }
+
+    .SaturdayHeader {
+        background-color: #d580ff;
+        border: 1px solid #d580ff !important;
+    }
+
+    .SaturdayColumns {
+        border: 1px solid #d580ff !important;
+    }
+
+    .SundayHeader {
+        background-color: #ff66ff;
+        border: 1px solid #ff66ff !important;
+    }
+
+    .SundayColumns {
+        border: 1px solid #ff66ff !important;
+        
+    }
+    .ChoreHeader {
+        background-image: -webkit-gradient( linear, left top, left bottom, color-stop(0.46, rgb(199, 197, 199)), color-stop(1, rgb(237, 237, 237)) );
+        background-image: -o-linear-gradient(bottom, rgb(199, 197, 199) 46%, rgb(237, 237, 237) 100%);
+        background-image: -moz-linear-gradient(bottom, rgb(199, 197, 199) 46%, rgb(237, 237, 237) 100%);
+        background-image: -webkit-linear-gradient(bottom, rgb(199, 197, 199) 46%, rgb(237, 237, 237) 100%);
+        background-image: -ms-linear-gradient(bottom, rgb(199, 197, 199) 46%, rgb(237, 237, 237) 100%);
+        background-image: linear-gradient(to bottom, rgb(199, 197, 199) 46%, rgb(237, 237, 237) 100%);
+    }
+    .ChoreColumns {
+        border-bottom: 1px solid black !important;
+        border-left: 1px solid black !important;
+        border-top: 1px solid black !important;
+        border-right: 0px !important;
+    }
+</style>
+<h2>My chores for this today.....</h2>
+<h4>Today's date is @DateTime.Now.ToString("D")</h4>
+<div class="container-fluid">
+    <div>Total earned this week: @dollarAmount.ToString("C")</div>
+    <div>
+        <table class="table table-bordered table-responsive">
+            <thead>
+                <tr>
+                    <th class="text-center text-uppercase LightBackground" style="" scope="col">Give (30%)</th>
+                    <th class="text-center text-uppercase LightBackground" style="" scope="col">Save (30%)</th>
+                    <th class="text-center text-uppercase LightBackground" style="" scope="col">Spend (30%)</th>
+                    <th class="text-center text-uppercase LightBackground" style="" scope="col">Tithe (10%)</th>
+                </tr>
+            </thead>
+            <tr>
+                <td class="text-center text-uppercase">@giveAmount.ToString("C")</td>
+                <td class="text-center text-uppercase">@saveAmount.ToString("C")</td>
+                <td class="text-center text-uppercase">@spendAmount.ToString("C")</td>
+                <td class="text-center text-uppercase">@titheAmount.ToString("C")</td>
+            </tr>
+        </table>
+    </div>
+    
+</div>
+<form asp-action="CompleteChore">
+    <input type="hidden" id="CompletedChores" name="CompletedChores" />
+    <input type="hidden" id="PendingChores" name="PendingChores" />
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                
+                <input class="btn btn-link" type="submit" value="Save Chore Changes" />
+                &nbsp;|&nbsp;<button class="btn btn-link" type="button" onclick="Cancel();">Cancel Chore Changes</button>
+                &nbsp;|&nbsp;<a class="btn btn-link" asp-controller="ChildrenWorks" asp-action="Index" >Show Today's Chore</a>
+
+            </div>
+        </div>
+        <div class="">
+            <table class="table table-bordered table-responsive">
+                <thead>
+                    <tr>
+                        <th class="text-center ChoreHeader" scope="col">Chore</th>
+                        @{
+                   
+                         }
+                         <th class="text-center MondayHeader" scope="col">Monday</th>
+                         <th class="text-center TuesdayHeader" scope="col">Tuesday</th>
+                         <th class="text-center WednesdayHeader" scope="col">Wednesday</th>
+                         <th class="text-center ThursdayHeader" scope="col">Thursday</th>
+                         <th class="text-center FridayHeader" scope="col">Friday</th>
+                         <th class="text-center SaturdayHeader" scope="col">Saturday</th>
+                         <th class="text-center SundayHeader" scope="col">Sunday</th>
+                         
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        bool ShowRow = true;
+
+
+                        
+                        string rowstyle = (ShowRow == false) ? "style=display:none" : "";
+                        <tr id="@item.ID" @rowstyle>
+                            <th scope="row" class="ChoreColumns" style=""><div>@ChoresExtensions.GetChoreName(_context, item.Chore)</div>
+                            <div>Description: <br/>@ChoresExtensions.GetChoreDescription(_context, item.Chore)</div>
+                            </th>
+                            
+                            
+                           @if (item.Monday){
+                                @if (item.MondayCompletedStatus == 0){
+                                    <td class="text-center datarow MondayColumns" id="Monday-@item.ID" style="background-color:white" scope="row">
+
+                                            @if (item.MondayAllowence != "")
+                                            {@item.MondayAllowence }
+                                        
+                                    </td>
+                                }
+                                else if (item.MondayCompletedStatus == 1)
+                                {
+                                    <!-- Figure out to set this particular column background color to yellow -->
+                                    <td class="text-center MondayColumns" id="Monday-@item.ID" style="background-color:yellow; color:black;font-weight:bold" scope="row">
+                                        @if (item.MondayAllowence != "")
+                                        { @item.MondayAllowence }
+                                    </td>
+                                }
+                                else if (item.MondayCompletedStatus == 2)
+                                {
+                                    <td class="text-center MondayColumns" style="background-color:green; color:white; font-weight:bold" scope="row">
+                                        @if (item.MondayAllowence != "")
+                                        {@item.MondayAllowence }
+                                    </td>
+                                }
+                           }
+                           else
+                           {
+                               <td class="MondayColumns"></td>
+
+                           }
+
+                            @if (item.Tuesday){
+                                @if (item.TuesdayCompletedStatus == 0)
+                                {
+                                    <td class="text-center datarow TuesdayColumns" id="Tuesday-@item.ID" style="background-color:white" scope="row">
+                                        
+                                            @if (item.TuesdayAllowence != "")
+                                            {@item.TuesdayAllowence }
+                                       
+                                    </td>
+                                }
+                                else if (item.TuesdayCompletedStatus == 1)
+                                {
+                                    <!-- Figure out to set this particular column background color to yellow -->
+                                    <td class="text-center TuesdayColumns" id="Tuesday-@item.ID" style="background-color:yellow; color:black;font-weight:bold" scope="row">
+                                         @if (item.TuesdayAllowence != "")
+                                        {@item.TuesdayAllowence }
+                                    </td>
+                                }
+                                else if (item.TuesdayCompletedStatus == 2)
+                                {
+                                    <td class="text-center TuesdayColumns" style="background-color:green; color:white; font-weight:bold" scope="row">
+                                        @if (item.TuesdayAllowence != "")
+                                        {@item.TuesdayAllowence }
+                                    </td>
+                                }
+                            }
+                            else
+                            {
+                                <td class="TuesdayColumns"></td>
+
+                            }
+                            @if (item.Wednesday)
+                            {
+                                @if (item.WednesdayCompletedStatus == 0)
+                                {
+                                    <td class="text-center datarow WednesdayColumns" id="Wednesday-@item.ID" style="background-color:white" scope="row">
+                                        
+                                        @if (item.WednesdayAllowence != "")
+                                        {@item.WednesdayAllowence }
+                                        
+                                    </td>
+                                }
+                                else if (item.WednesdayCompletedStatus == 1)
+                                {
+                                    <!-- Figure out to set this particular column background color to yellow -->
+                                    <td class="text-center WednesdayColumns" id="Wednesday-@item.ID" style="background-color:yellow; color:black;font-weight:bold" scope="row">
+                                        @if (item.WednesdayAllowence != "")
+                                        {@item.WednesdayAllowence }
+
+
+                                    </td>
+                                }
+                                else if (item.WednesdayCompletedStatus == 2)
+                                {
+                                    <td class="text-center WednesdayColumns" style="background-color:green; color:white; font-weight:bold" scope="row">
+                                        @if (item.WednesdayAllowence != "")
+                                        {@item.WednesdayAllowence }
+
+
+                                    </td>
+                                }
+                            }
+                            else
+                            {
+                                <td class="WednesdayColumns"></td>
+
+                            }
+                           @if (item.Thursday){
+                                @if (item.ThursdayCompletedStatus == 0)
+                                {
+                                    <td class="text-center datarow ThursdayColumns" id="Thursday-@item.ID" style="background-color:white" scope="row">
+                                        
+                                           @if (item.ThursdayAllowence != "")
+                                           {
+                                                @item.ThursdayAllowence
+                                           }
+                                       
+                                    </td>
+                                }
+                                else if (item.ThursdayCompletedStatus == 1)
+                                {
+                                    <!-- Figure out to set this particular column background color to yellow -->
+                                    <td class="text-center ThursdayColumns" id="Thursday-@item.ID" style="background-color:yellow; color:black;font-weight:bold" scope="row">
+                                        @if (item.ThursdayAllowence != "")
+                                        {
+                                            @item.ThursdayAllowence
+                                        }
+                                    </td>
+                                }
+                                else if (item.ThursdayCompletedStatus == 2)
+                                {
+                                    <td class="text-center ThursdayColumns" style="background-color:green; color:white; font-weight:bold" scope="row">
+                                        @if (item.ThursdayAllowence != ""){
+                                            @item.ThursdayAllowence 
+                                        }
+                                    </td>
+                                }
+                           }
+                           else
+                           {
+                            <td class="ThursdayColumns"></td>
+
+                           }
+                           @if (item.Friday){
+                                @if (item.FridayCompletedStatus == 0)
+                                {
+                                    <td class="text-center datarow FridayColumns" id="Friday-@item.ID" style="background-color:white" scope="row">
+                                       
+                                           @if (item.FridayAllowence != "")
+                                           {
+                                                @item.FridayAllowence
+                                           }
+                                        
+                                    </td>
+                                }
+                                else if (item.FridayCompletedStatus == 1)
+                                {
+                                    <!-- Figure out to set this particular column background color to yellow -->
+                                    <td class="text-center FridayColumns" id="Friday-@item.ID" style="background-color:yellow; color:black;font-weight:bold" scope="row">
+                                        @if (item.FridayAllowence != "")
+                                        {
+                                            @item.FridayAllowence
+                                        }
+                                    </td>
+                                }
+                                else if (item.FridayCompletedStatus == 2)
+                                {
+                                    <td class="text-center FridayColumns" style="background-color:green; color:white; font-weight:bold" scope="row">
+                                        @if (item.FridayAllowence != "")
+                                        {
+                                            @item.FridayAllowence
+                                        }
+                                    </td>
+                                }
+                           }
+                           else
+                           {
+                            <td class="FridayColumns"></td>
+
+                           }
+                           @if (item.Saturday){
+                                @if (item.SaturdayCompletedStatus == 0)
+                                {
+                                    <td class="text-center datarow SaturdayColumns" id="Saturday-@item.ID" style="background-color:white" scope="row">
+                                        
+                                           @if (item.SaturdayAllowence != "")
+                                           {
+                                            @item.SaturdayAllowence
+                                           }
+                                       
+                                    </td>
+                                }
+                                else if (item.SaturdayCompletedStatus == 1)
+                                {
+                                    <!-- Figure out to set this particular column background color to yellow -->
+                                    <td class="text-center SaturdayColumns" id="Saturday-@item.ID" style="background-color:yellow; color:black;font-weight:bold" scope="row">
+                                        @if (item.SaturdayAllowence != "")
+                                        {
+                                            @item.SaturdayAllowence
+                                        }
+                                    </td>
+                                }
+                                else if (item.SaturdayCompletedStatus == 2)
+                                {
+                                    <td class="text-center SaturdayColumns" style="background-color:green; color:white; font-weight:bold" scope="row">
+                                        @if (item.SaturdayAllowence != "")
+                                        {
+                                            @item.SaturdayAllowence
+                                        }
+                                    </td>
+                                }
+                           }
+                           else
+                           {
+                            <td class="SaturdayColumns"></td>
+
+                           }
+                           @if (item.Sunday){
+                                @if (item.SundayCompletedStatus == 0)
+                                {
+                                    <td class="text-center datarow SundayColumns" id="Sunday-@item.ID" style="background-color:white" scope="row">
+                                        
+                                           @if (item.SundayAllowence != "")
+                                           {
+                                            @item.SundayAllowence
+                                           }
+                                       
+                                    </td>
+                                }
+                                else if (item.SundayCompletedStatus == 1)
+                                {
+                                    <!-- Figure out to set this particular column background color to yellow -->
+                                    <td class="text-center SundayColumns" id="Sunday-@item.ID" style="background-color:yellow; color:black;font-weight:bold" scope="row">
+                                        @if (item.SundayAllowence != "")
+                                        {
+                                            @item.SundayAllowence
+                                        }
+                                    </td>
+                                }
+                                else if (item.SundayCompletedStatus == 2)
+                                {
+                                    <td class="text-center SundayColumns" style="background-color:green; color:white; font-weight:bold" scope="row">
+                                       @if (item.SundayAllowence != "")
+                                       {
+                                        @item.SundayAllowence
+                                       }
+                                    </td>
+                                }
+                           }
+                           else
+                           {
+                            <td class="SundayColumns"></td>
+
+                           }
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+            <div class="container-fluid">
+                <table class="table table-bordered table-responsive">
+                    <thead>
+                        <tr>
+                            <th class="text-center text-uppercase" style="background-color:white;" scope="col">not completed</th>
+                            <th class="text-center text-uppercase" style="background-color:yellow;" scope="col">Waiting for parent to check</th>
+                            <th class="text-center text-uppercase" style="background-color:green;color:white" scope="col">completed</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</form>

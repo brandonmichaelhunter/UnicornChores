@@ -1,0 +1,65 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using ParentsRules.Models
+@using ParentsRules.Extensions;
+@using ParentsRules.Data;
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    ViewData["Title"] = "Unicorn Chores";
+}
+@inject UserManager<ApplicationUser> _userManager
+<style type="text/css">
+    .containerAlt{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+    </style>.
+
+ 
+<div class="container-fluid ">
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4"><img src="~/images/UnicornLoginImage.png" alt="Unicorn Chores" class="img-rounded img-responsive" /></div>
+        <div class="col-sm-4"></div>
+
+    </div>
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8 text-center" id="responsive_headline">
+            
+            <div id="responsive_headline">
+                <b>
+                    <font color="#ee0000">U</font>
+                    <font color="#ff7700">N</font>
+                    <font color="#eeee00">I</font>
+                    <font color="#00bb00">C</font>
+                    <font color="#0000ee">O</font>
+                    <font color="#dd00dd">R</font>
+                    <font color="#880088">N</font>
+                    &nbsp;
+                    <font color="#ee0000">C</font>
+                    <font color="#ff7700">H</font>
+                    <font color="#eeee00">O</font>
+                    <font color="#00bb00">R</font>
+                    <font color="#0000ee">E</font>
+                    <font color="#dd00dd">S</font>
+                </b>
+            </div>
+            <h3>Getting chores done right!!</h3>
+            @if (SignInManager.IsSignedIn(User) == false)
+            {
+                <h3><a asp-action="Login" asp-controller="Account">Login</a></h3>
+            }
+
+            <h4><i>"Mommy and Daddy, I love doing my chores using the Unicorn Chores app....Yeah!!!"</i>- Brandon Ian Hunter</h4>
+        </div>
+        <div class="col-sm-2"></div>
+
+    </div>
+    
+    
+</div>
+
+
+
+

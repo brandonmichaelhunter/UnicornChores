@@ -1,0 +1,38 @@
+﻿@model ParentsRules.Models.ManageViewModels.IndexViewModel
+
+
+<h4>Create a Friend Request</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <h3>Make a Friend Request</h3>
+            <!-- Shows people who are associated with this account.-->
+            <div class="form-group">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AssociatedUserFirstName"></label>
+                <input asp-for="AssociatedUserFirstName" class="form-control" />
+                <span asp-validation-for="AssociatedUserFirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AssociatedUserLastName"></label>
+                <input asp-for="AssociatedUserLastName" class="form-control" />
+                <span asp-validation-for="AssociatedUserLastName" class="text-danger"></span>
+                <button asp-action="SendFriendRequest" class="btn btn-link">Send Parent Requests</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

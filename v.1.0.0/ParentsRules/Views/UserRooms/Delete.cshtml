@@ -1,0 +1,51 @@
+﻿@using ParentsRules.Extensions;
+@using ParentsRules.Data;
+@model ParentsRules.Models.Rooms.UserRooms
+
+@{
+    ViewData["Title"] = "Delete";
+}
+@inject ApplicationDbContext _context
+@{ 
+    string DisplayDateValue = ((Model.DateCreated.HasValue == true)? Model.DateCreated.Value.ToShortDateString() : "N/A");
+}
+<h2>Delete Room - <i>@Html.DisplayFor(model => model.Room)</i></h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Room)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Room)
+        </dd>
+        <dt>
+            Author
+        </dt>
+        <dd>
+            @UserProfileExtensions.GetDisplayName(_context, Model.UserID)
+
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DateCreated)
+        </dt>
+        <dd>
+            @DisplayDateValue;
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IsActive)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="ID" />
+        <input type="submit" value="Delete Room" class="btn btn-default  btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

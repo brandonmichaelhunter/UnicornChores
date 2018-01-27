@@ -1,0 +1,126 @@
+﻿@model ParentsRules.Models.ChildrenWork
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ChildrenWork</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Chore)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Chore)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RoomID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RoomID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UserID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UserID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DollarAmount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DollarAmount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ParentID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ParentID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DateDue)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateDue)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Monday)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Monday)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Tuesday)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Tuesday)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Wednesday)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Wednesday)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Thursday)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Thursday)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Friday)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Friday)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Saturday)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Saturday)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Sunday)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Sunday)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ChoreCompleted)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ChoreCompleted)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DateChoreCompleted)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateChoreCompleted)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ParentVerified)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ParentVerified)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ParentVerifiedDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ParentVerifiedDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ChoreID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ChoreID)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

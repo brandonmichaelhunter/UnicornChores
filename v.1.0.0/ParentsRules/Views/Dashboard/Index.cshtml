@@ -1,0 +1,145 @@
+﻿@using ParentsRules.Extensions;
+@using ParentsRules.Data;
+@model IEnumerable<ParentsRules.Models.DashboardViewModels.DashboardViewModel>
+
+@{
+    ViewData["Title"] = "Chores Dashboard";
+}
+@inject ApplicationDbContext _context
+
+<h2>Chores Dashboard</h2>
+<hr style="display: block;margin-top: 0.5em;margin-bottom: 0.5em;margin-left: auto;margin-right: auto;border-style: inset;border-width: 1px;">
+<div class="container">
+    <div class="row">
+        <div class="col-sm-2"><a asp-controller="UserChores" asp-action="Create">Assign a Chore</a></div>
+        <div class="col-sm-2"><a asp-controller="ChoreTypes" asp-action="Index">Manage Chore Types</a></div>
+        
+        <div class="col-sm-2"><a asp-controller="UserRooms" asp-action="Index">Manage Rooms</a></div>
+        <div class="col-sm-2"><a asp-controller="Dashboard" asp-action="CompletedChores">Pending Completed Chores (@ViewData["PendingCompletedChores"].ToString())</a></div>
+        <div class="col-sm-2"><a asp-controller="Dashboard" asp-action="AllCompletedChores">Completed Chores</a></div>
+        <div class="col-sm-2"><a asp-controller="Friends" asp-action="Index">Manage Family</a></div>
+    </div>
+</div>
+<p>
+
+</p>
+<div class="container">
+    
+    @foreach (var item in Model)
+    {
+        <div class="row">
+            <div class="col-sm-12"><strong>@Html.DisplayFor(modelItem => item.AssignedChildName)</strong></div>
+
+        </div>
+        <div class="row">
+            
+                <div class="col-md-12 col-lg-12 visible-lg visible-md hidden-sm hidden-xs" style="margin-left:2%">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">Published Status</th>
+                                <th scope="col">Chore</th>
+                                <th scope="col">Room</th>
+                                <th scope="col">Allowence</th>
+                                <th scope="col">Author</th>
+                                <th scope="col">Assigned Days</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+@foreach (var chore in item.Chores)
+{
+                            <tr>
+                                <td scope="row">@if (chore.PublishStatus == "Not Published" || chore.PublishStatus == "")
+                                {
+                                    <div style="color:red">@chore.PublishStatus</div>
+                                    <div><a asp-action="PublishChore" asp-controller="UserChores" asp-route-id="@chore.ID">Publish chore to Child's work list</a></div>
+                                }
+                                else
+                                {
+                                    <div style="color:green">@chore.PublishStatus </div>
+                                    <div>Last Published Date: @chore.LastPublishDate</div>
+                                    <div><a asp-action="PublishChore" asp-controller="UserChores" asp-route-id="@chore.ID">Publish chore to Child's work list</a></div>
+                                }
+                                
+                                </td>
+                                <td>@ChoresExtensions.GetChoreName(_context, chore.Chore)</td>
+                                <td>@ChoresExtensions.GetRoomName(_context, chore.RoomID)</td>
+                                <td>@Html.DisplayFor(modelItem => chore.DollarAmount)</td>
+                                <td>@ChoresExtensions.GetDisplayName(_context, chore.ParentID)</td>
+                                <td><div>Monday: @Html.DisplayFor(modelItem => chore.Monday) &nbsp;Tuesday: @Html.DisplayFor(modelItem => chore.Tuesday)&nbsp;Wednesday: @Html.DisplayFor(modelItem => chore.Wednesday)&nbsp;Thursday: @Html.DisplayFor(modelItem => chore.Thursday)&nbsp;Friday: @Html.DisplayFor(modelItem => chore.Friday)&nbsp;Saturday: @Html.DisplayFor(modelItem => chore.Saturday)&nbsp;Sunday: @Html.DisplayFor(modelItem => chore.Sunday)</div></td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col-sm-12"><a asp-action="Edit" asp-controller="UserChores" asp-route-id="@chore.ID">Edit Chore</a></div>
+                                        <div class="col-sm-12"><a asp-action="Details" asp-controller="UserChores" asp-route-id="@chore.ID">See Chore Details</a></div>
+                                        <div class="col-sm-12">
+                                            <a asp-action="Delete" asp-controller="UserChores" asp-route-id="@chore.ID">Delete Chore</a>
+                                        </div>
+
+                                    </div>
+                                </td>
+                            </tr>
+}
+                        </tbody>
+                    </table>
+                </div>
+@foreach (var chore in item.Chores)
+{
+                <div class="col-sm-12 visible-sm hidden-md hidden-lg visible-xs"  style="margin-left:2%">
+                    <div class="row">
+                        <div class="col-sm-2">Actions:</div>
+                        <div class="col-sm-10"><a asp-action="Edit" asp-controller="UserChores" asp-route-id="@chore.ID">Edit Chore</a>
+                            &nbsp;|&nbsp;<a asp-action="Details" asp-controller="UserChores" asp-route-id="@chore.ID">See Chore Details</a>
+                            &nbsp;|&nbsp;<a asp-action="Delete" asp-controller="UserChores" asp-route-id="@chore.ID">Delete Chore</a>
+                            &nbsp;|&nbsp;<a asp-action="PublishChore" asp-controller="UserChores" asp-route-id="@chore.ID">Publish chore to Child's work list</a>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">Published:</div>
+                        @if (chore.PublishStatus == "Not Published" || chore.PublishStatus == "")
+                        {
+                            <div style="color:red" class="col-sm-10">@chore.PublishStatus</div>
+                        }
+                        else
+                        {
+                            <div  style="color:green" class="col-sm-10">
+                        @chore.PublishStatus 
+                            (Last Published Date: @chore.LastPublishDate)</div>
+                        }
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">Chore: </div>
+                        <div class="col-sm-10">@ChoresExtensions.GetChoreName(_context, chore.Chore)</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">Room:</div>
+                        <div class="col-sm-10">@ChoresExtensions.GetRoomName(_context, chore.RoomID)</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">@Html.DisplayNameFor(model => chore.DollarAmount):</div>
+                        <div class="col-sm-10">@Html.DisplayFor(modelItem => chore.DollarAmount)</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">Author:</div>
+                        <div class="col-sm-10">@ChoresExtensions.GetDisplayName(_context, chore.ParentID)</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">Assigned Days:</div>
+                        <div class="col-sm-10">
+                            <div>Monday: @Html.DisplayFor(modelItem => chore.Monday) &nbsp;Tuesday: @Html.DisplayFor(modelItem => chore.Tuesday)&nbsp;Wednesday: @Html.DisplayFor(modelItem => chore.Wednesday)&nbsp;Thursday: @Html.DisplayFor(modelItem => chore.Thursday)&nbsp;Friday: @Html.DisplayFor(modelItem => chore.Friday)&nbsp;Saturday: @Html.DisplayFor(modelItem => chore.Saturday)&nbsp;Sunday: @Html.DisplayFor(modelItem => chore.Sunday)</div>
+                        </div>
+                    </div>
+  
+                    
+                    <hr style="display: block;margin-top: 0.5em;margin-bottom: 0.5em;margin-left: auto;margin-right: auto;border-style: inset;border-width: 1px;">
+                </div>
+                
+}
+            
+        </div>
+
+        <hr style="display: block;margin-top: 0.5em;margin-bottom: 0.5em;margin-left: auto;margin-right: auto;border-style: inset;border-width: 2px;">
+    }
+</div>

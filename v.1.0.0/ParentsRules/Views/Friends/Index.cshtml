@@ -1,0 +1,64 @@
+﻿@model ParentsRules.Models.ManageViewModels.IndexViewModel
+
+@{
+    ViewData["Title"] = "Parents";
+
+}
+
+<h2>Parents</h2>
+<hr style="display: block;margin-top: 0.5em;margin-bottom: 0.5em;margin-left: auto;margin-right: auto;border-style: inset;border-width: 1px;">
+<div class="container">
+    <div class="row">
+
+        <div class="col-sm-4"><a asp-action="Children">See Children</a></div>
+        <div class="col-sm-4"><a asp-action="FriendRequests">See My Parents Requests</a></div>
+        <div class="col-sm-4"><a asp-controller="Dashboard" asp-action="Index">Return to Dashboard</a></div>
+    </div>
+</div>
+
+<div class="container">
+
+        <div class="row">
+            <div class="col-md-12 table-responsive-sm">
+                <h4>Parents associated with my account</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Friends Since</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewData["Friends"] != null)
+                        {
+                            IEnumerable<FriendViewModel> friends = ViewData["Friends"] as IEnumerable<FriendViewModel>;
+                            foreach (var friend in friends)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => friend.FirstName)&nbsp;
+                                        @Html.DisplayFor(modelItem => friend.MiddleName)&nbsp;
+                                        @Html.DisplayFor(modelItem => friend.LastName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => friend.Email)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => friend.FriendSince)
+                                    </td>
+                                </tr>
+
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")}
+

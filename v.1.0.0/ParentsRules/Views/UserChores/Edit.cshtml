@@ -1,0 +1,115 @@
+﻿@using ParentsRules.Extensions;
+@using ParentsRules.Data;
+@model ParentsRules.Models.Chroes.UserChores
+
+@{
+    ViewData["Title"] = "Edit Chore";
+}
+@inject ApplicationDbContext _context
+<h2>Ediing Assigned Chore - <i>@ChoresExtensions.GetChoreName(_context, Model.Chore)</i></h2>
+
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="UserID" class="control-label">Child</label>
+                <select asp-for="UserID" class="form-control" asp-items="@ViewBag.Children"></select>
+                <span asp-validation-for="UserID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Chore" class="control-label">Select a Chore</label>
+                <select asp-for="Chore" class="form-control" asp-items="@ViewBag.Chores"></select>
+                <span asp-validation-for="Chore" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RoomID" class="control-label">Select a Room (Optional)</label>
+                <select asp-for="RoomID" class="form-control" asp-items="@ViewBag.Rooms"></select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DollarAmount" class="control-label">What is the dollar amount to complete this task? (Optional)</label>
+                <input asp-for="DollarAmount" class="form-control" type="number"  />
+
+            </div>
+            <div class="form-group">
+                <input asp-for="ParentID" type="hidden" class="form-control hidden" value="@ViewBag.CurrentUserID" />
+            </div>
+            <div class="form-group hidden">
+                <label asp-for="DateDue" class="control-label">Does this chore have a due date?</label>
+                <input asp-for="DateDue" class="form-control" type="date" />
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>
+                                <input asp-for="IsDaily" />Is this a daily chore?
+                            </label>
+                        </div>
+                        <div class="col-sm-6 hidden">
+                            <label>
+                                <input asp-for="IsWeekly" />Is this a weekly chore?
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <h3>What day should this chore be completed?</h3>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="checkbox">
+                                <label><input asp-for="Monday" />Monday</label>&nbsp;
+                                <label><input asp-for="Tuesday" />Tuesday</label>&nbsp;
+                                <label><input asp-for="Wednesday" />Wednesday</label>&nbsp;
+                                <label><input asp-for="Thursday" />Thursday</label>&nbsp;
+                                <label><input asp-for="Friday" />Friday</label>&nbsp;
+                                <label><input asp-for="Saturday" />Saturday</label>&nbsp;
+                                <label><input asp-for="Sunday" />Sunday</label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save Changes" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="Dashboard" asp-action="Index">Back to List</a>
+</div>
+<script src="@Url.Content("~/lib/jquery/dist/jquery.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+        //Fix later - remove validation for due date and dollar amount
+        $("#DollarAmount").removeAttr("data-val-required");
+        $("#DateDue").removeAttr("data-val-required");
+        $("#RoomID").removeAttr("data-val-required");
+        $('#IsDaily ').click(function () {
+
+            $("#Monday").prop('checked', $(this).prop('checked'));
+            $("#Tuesday").prop('checked', $(this).prop('checked'));
+            $("#Wednesday").prop('checked', $(this).prop('checked'));
+            $("#Thursday").prop('checked', $(this).prop('checked'));
+            $("#Friday").prop('checked', $(this).prop('checked'));
+            $("#Saturday").prop('checked', $(this).prop('checked'));
+            $("#Sunday").prop('checked', $(this).prop('checked'));
+        });
+    });
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

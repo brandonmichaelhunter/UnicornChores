@@ -1,0 +1,377 @@
+﻿@using ParentsRules.Extensions;
+@using ParentsRules.Data;
+@model IEnumerable<ParentsRules.Models.ChildrenWork>
+
+@{
+    ViewData["Title"] = "Index";
+    string CurrentDay =  DateTime.Now.DayOfWeek.ToString();
+    bool IsMonday = (CurrentDay == "Monday") ? true : false;
+    bool IsTuesday = (CurrentDay == "Tuesday") ? true : false;
+    bool IsWednesday = (CurrentDay == "Wednesday") ? true : false;
+    bool IsThursday = (CurrentDay == "Thursday") ? true : false;
+    bool IsFriday = (CurrentDay == "Friday") ? true : false;
+    bool IsSaturday = (CurrentDay == "Saturday") ? true : false;
+    bool IsSunday = (CurrentDay == "Sunday") ? true : false;
+}
+@inject ApplicationDbContext _context
+@{ 
+    double dollarAmount = (ViewData["DollarAmount"] != null) ? Convert.ToDouble(ViewData["DollarAmount"].ToString()) : 0.00;
+    double giveAmount = Math.Round(dollarAmount * .3, 2);
+    double saveAmount = Math.Round(dollarAmount * .3, 2);
+    double spendAmount = Math.Round(dollarAmount * .3, 2);
+    double titheAmount = Math.Round(dollarAmount * .1, 2);
+}
+<style type="text/css">
+    .LightBackground {
+        background: linear-gradient(141deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%) !important;
+        color: white;
+    }
+
+    .MondayHeader {
+        background-color: #ff8080;
+        border: 1px solid #ff8080 !important;
+    }
+
+    .MondayColumns {
+        border: 1px solid #ff8080 !important;
+    }
+
+    .TuesdayHeader {
+        background-color: #ff944d;
+        border: 1px solid #ff944d !important;
+    }
+
+    .TuesdayColumns {
+        border: 1px solid #ff944d !important;
+    }
+
+    .WednesdayHeader {
+        background-color: #e6e600;
+        border: 1px solid #e6e600 !important;
+    }
+
+    .WednesdayColumns {
+        border: 1px solid #e6e600 !important;
+    }
+
+    .ThursdayHeader {
+        background-color: #99cc00;
+        border: 1px solid #99cc00 !important;
+    }
+
+    .ThursdayColumns {
+        border: 1px solid  !important;
+    }
+
+    .FridayHeader {
+        background-color: #00bfff;
+        border: 1px solid #00bfff !important;
+    }
+
+    .FridayColumns {
+        border: 1px solid #00bfff !important;
+    }
+
+    .SaturdayHeader {
+        background-color: #d580ff;
+        border: 1px solid #d580ff !important;
+    }
+
+    .SaturdayColumns {
+        border: 1px solid #d580ff !important;
+    }
+
+    .SundayHeader {
+        background-color: #ff66ff;
+        border: 1px solid #ff66ff !important;
+    }
+
+    .SundayColumns {
+        border: 1px solid #ff66ff !important;
+    }
+
+    .ChoreHeader {
+        background-image: -webkit-gradient( linear, left top, left bottom, color-stop(0.46, rgb(199, 197, 199)), color-stop(1, rgb(237, 237, 237)) );
+        background-image: -o-linear-gradient(bottom, rgb(199, 197, 199) 46%, rgb(237, 237, 237) 100%);
+        background-image: -moz-linear-gradient(bottom, rgb(199, 197, 199) 46%, rgb(237, 237, 237) 100%);
+        background-image: -webkit-linear-gradient(bottom, rgb(199, 197, 199) 46%, rgb(237, 237, 237) 100%);
+        background-image: -ms-linear-gradient(bottom, rgb(199, 197, 199) 46%, rgb(237, 237, 237) 100%);
+        background-image: linear-gradient(to bottom, rgb(199, 197, 199) 46%, rgb(237, 237, 237) 100%);
+    }
+
+    .ChoreColumns {
+        border-bottom: 1px solid black !important;
+        border-left: 1px solid black !important;
+        border-top: 1px solid black !important;
+        border-right: 0px !important;
+    }
+</style>
+<script type="text/javascript">
+    var chores = [];
+
+    function SetCompletedTask(TaskID, DayName) {
+        document.getElementById('CompletedChores').value = "";
+        console.log(chores)
+        if (chores.length == 0) {
+            chores = []
+            //Add the chore if the list is empty
+            chore = {
+                TaskID: TaskID,
+                Monday: (DayName == 'Monday') ? 1 : 0,
+                Tuesday: (DayName == 'Tuesday') ? 1 : 0,
+                Wednesday: (DayName == 'Wednesday') ? 1 : 0,
+                Thursday: (DayName == 'Thursday') ? 1 : 0,
+                Friday: (DayName == 'Friday') ? 1 : 0,
+                Saturday: (DayName == 'Saturday') ? 1 : 0,
+                Sunday: (DayName == 'Sunday') ? 1 : 0,
+            }
+            chores.push(chore);
+            var colID = DayName + "-" + TaskID;
+            if (document.getElementById(colID).style.backgroundColor == "white") {
+                document.getElementById(colID).style.backgroundColor = "orange";
+            }
+            else {
+                document.getElementById(colID).style.backgroundColor = "white";
+
+            }
+
+        }
+        else
+        {
+            var ChoreExists = false;
+             // Lookup the chore record
+            for (var a = 0; a <= chores.length-1; a++){
+                if (chores[a].TaskID == TaskID) {
+                    ChoreExists = true;
+                    chores[a].TaskID = TaskID;
+                    chores[a].Monday = SetValue('Monday', DayName, chores[a].Monday, TaskID);
+                    chores[a].Tuesday = SetValue('Tuesday', DayName, chores[a].Tuesday, TaskID);
+                    chores[a].Wednesday = SetValue('Wednesday', DayName, chores[a].Wednesday, TaskID);
+                    chores[a].Thursday = SetValue('Thursday', DayName, chores[a].Thursday, TaskID);
+                    chores[a].Friday = SetValue('Friday', DayName, chores[a].Friday, TaskID);
+                    chores[a].Saturday = SetValue('Saturday', DayName, chores[a].Saturday, TaskID);
+                    chores[a].Sunday = SetValue('Sunday', DayName, chores[a].Sunday, TaskID);
+
+                    var colID = DayName + "-" + TaskID;
+                    if (document.getElementById(colID).style.backgroundColor == "white") {
+                        document.getElementById(colID).style.backgroundColor = "orange";
+                    }
+                    else {
+                        document.getElementById(colID).style.backgroundColor = "white";
+
+                    }
+                    break;
+                }
+            }
+            /* If the chore does not exists, then add it the the chores array*/
+            if (ChoreExists == false) {
+                chore = {
+                    TaskID: TaskID,
+                    Monday: (DayName == 'Monday') ? 1 : 0,
+                    Tuesday: (DayName == 'Tuesday') ? 1 : 0,
+                    Wednesday: (DayName == 'Wednesday') ? 1 : 0,
+                    Thursday: (DayName == 'Thursday') ? 1 : 0,
+                    Friday: (DayName == 'Friday') ? 1 : 0,
+                    Saturday: (DayName == 'Saturday') ? 1 : 0,
+                    Sunday: (DayName == 'Sunday') ? 1 : 0,
+                }
+                chores.push(chore);
+                var colID = DayName + "-" + TaskID;
+                if (document.getElementById(colID).style.backgroundColor == "white") {
+                    document.getElementById(colID).style.backgroundColor = "orange";
+                }
+                else {
+                    document.getElementById(colID).style.backgroundColor = "white";
+
+                }
+            }
+        }
+        console.log(chores);
+        document.getElementById('CompletedChores').value = JSON.stringify(chores);
+        return false;
+    }
+    function SetValue(DayName, DayNameValue, CurrentValue,ID) {
+        var colID = DayNameValue+"-"+ID
+        if (DayName == DayNameValue) {
+            if (CurrentValue == 0) {
+
+                return 1;
+            }
+            else {
+
+                return 0;
+
+            }
+        }
+        else {
+
+            return CurrentValue;
+
+        }
+
+    }
+    function SaveChanges() {
+
+
+    }
+    function Cancel() {
+
+        //document.getElementsByClassName('data-row').style.backgroundColor = "white";
+        location.reload();
+    }
+</script>
+<h2>My chores for this today.....</h2>
+<h4>Today's date is @DateTime.Now.ToString("D")</h4>
+<div class="container-fluid">
+    <div>Total earned this week: @dollarAmount.ToString("C")</div>
+    <div>
+        <table class="table table-bordered table-responsive">
+            <thead>
+                <tr>
+                    <th class="text-center text-uppercase LightBackground" style="" scope="col">Give (30%)</th>
+                    <th class="text-center text-uppercase LightBackground" style="" scope="col">Save (30%)</th>
+                    <th class="text-center text-uppercase LightBackground" style="" scope="col">Spend (30%)</th>
+                    <th class="text-center text-uppercase LightBackground" style="" scope="col">Tithe (10%)</th>
+                </tr>
+            </thead>
+            <tr>
+                <td class="text-center text-uppercase">@giveAmount.ToString("C")</td>
+                <td class="text-center text-uppercase">@saveAmount.ToString("C")</td>
+                <td class="text-center text-uppercase">@spendAmount.ToString("C")</td>
+                <td class="text-center text-uppercase">@titheAmount.ToString("C")</td>
+            </tr>
+        </table>
+    </div>
+    
+</div>
+<form asp-action="CompleteChore">
+    <input type="hidden" id="CompletedChores" name="CompletedChores" />
+    <input type="hidden" id="PendingChores" name="PendingChores" />
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                
+                <input class="btn btn-link" type="submit" value="Save Chore Changes" />
+                &nbsp;|&nbsp;<button class="btn btn-link" type="button" onclick="Cancel();">Cancel Chore Changes</button>
+                &nbsp;|&nbsp;<a class="btn btn-link" asp-controller="ChildrenWorks" asp-action="ShowAllChores" >Show All Your Chores</a>
+
+            </div>
+        </div>
+        <div class="">
+            <table class="table table-bordered table-responsive">
+                <thead>
+                    <tr>
+                        <th class="text-center  ChoreHeader" scope="col">Chore</th>
+                        @{
+                            string MondayStyle = (IsMonday) ? "style=background-color:#ff8080;" : "style=display:none;";
+                            string TuesdayStyle = (IsTuesday) ? "style=background-color:#ff944d;" : "style=display:none";
+                            string WednesdayStyle = (IsWednesday) ? "style=background-color:#e6e600" : "style=display:none";
+                            string ThursdayStyle = (IsThursday) ? "style=background-color:#99cc00;" : "style=display:none";
+                            string FridayStyle = (IsFriday) ? "style=background-color:#00bfff;" : "style=display:none";
+                            string SaturdayStyle = (IsSaturday) ? "style=background-color:#d580ff;" : "style=display:none";
+                            string SundayStyle = (IsSunday) ? "style=background-color:#ff66ff;" : "style=display:none";
+                         }
+                         <th class="text-center MondayHeader" scope="col" @MondayStyle>Monday</th>
+                         <th class="text-center TuesdayHeader" scope="col" @TuesdayStyle>Tuesday</th>
+                         <th class="text-center WednesdayHeader" scope="col" @WednesdayStyle>Wednesday</th>
+                         <th class="text-center ThursdayHeader" scope="col" @ThursdayStyle>Thursday</th>
+                         <th class="text-center FridayHeader" scope="col" @FridayStyle>Friday</th>
+                         <th class="text-center SaturdayHeader" scope="col" @SaturdayStyle>Saturday</th>
+                         <th class="text-center SundayHeader" scope="col" @SundayStyle>Sunday</th>
+                         <th class="text-center hidden" scope="col">Total Earned</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        bool ShowRow = true;
+
+                        string RowClass = "";
+                        if (IsMonday){
+                            RowClass = "text-center datarow MondayColumns";
+                        }
+                        else if (IsTuesday){
+                            RowClass = "text-center datarow TuesdayColumns";
+                        }
+                        else if (IsWednesday){
+                            RowClass = "text-center datarow WednesdayColumns";
+                        }
+                        else if (IsThursday){
+                            RowClass = "text-center datarow ThursdayColumns";
+                        }
+                        else if (IsFriday){
+                            RowClass = "text-center datarow FridayColumns";
+                        }
+                        else if (IsSaturday){
+                            RowClass = "text-center datarow SaturdayColumns";
+                        }
+                        else if (IsSunday){
+                            RowClass = "text-center datarow SundayColumns";
+                        }
+                        else{
+                            RowClass = "text-center datarow";
+                        }
+
+                        string rowstyle = (ShowRow == false) ? "style=display:none" : "";
+                        <tr id="@item.ID" @rowstyle>
+                            <th scope="row" class="ChoreColumns "><div>@ChoresExtensions.GetChoreName(_context, item.Chore)</div>
+                            <div>Description: <br/>@ChoresExtensions.GetChoreDescription(_context, item.Chore)</div>
+                            </th>
+                            
+                            
+                           
+                                @if (!item.ChoreCompleted)
+                                {
+                                    <td class="@RowClass" id="@CurrentDay-@item.ID" style="background-color:white" scope="row">
+                                        <a onclick="SetCompletedTask(@item.ID, '@CurrentDay');">
+                                            @if (item.DollarAmount > 0)
+                                            {@item.DollarAmount.ToString("C") }
+                                        </a>
+                                    </td>
+                                }
+                                else if (item.ChoreCompleted && item.ParentVerified == false)
+                                {
+                                    <!-- Figure out to set this particular column background color to yellow -->
+                                    <td class="@RowClass"  id="@CurrentDay-@item.ID" style="background-color:yellow; color:black;font-weight:bold" scope="row">
+                                        @if (item.DollarAmount > 0)
+                                        { @item.DollarAmount.ToString("C") }
+                                    </td>
+                                }
+                                else if (item.ChoreCompleted && item.ParentVerified)
+                                {
+                                    <td class="@RowClass"  style="background-color:green; color:white; font-weight:bold" scope="row">
+                                        @if (item.DollarAmount > 0)
+                                        {@item.DollarAmount.ToString("C") }
+                                    </td>
+                                }
+                             
+                           
+                           
+                            
+                            
+                            
+                            
+                            
+                            <td class="text-center hidden">
+
+                                @item.TotalEarned
+                            </td>
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+            <div class="container-fluid">
+                <table class="table table-bordered table-responsive">
+                    <thead>
+                        <tr>
+                            <th class="text-center text-uppercase" style="background-color:white;" scope="col">not completed</th>
+                            <th class="text-center text-uppercase" style="background-color:yellow;" scope="col">Waiting for parent to check</th>
+                            <th class="text-center text-uppercase" style="background-color:green;color:white" scope="col">completed</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</form>

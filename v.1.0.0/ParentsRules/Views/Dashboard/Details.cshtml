@@ -1,0 +1,30 @@
+﻿@model ParentsRules.Models.DashboardViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>DashboardViewModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AssignedChildID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AssignedChildID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AssignedChildName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AssignedChildName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

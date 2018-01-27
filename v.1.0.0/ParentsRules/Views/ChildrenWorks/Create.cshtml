@@ -1,0 +1,136 @@
+﻿@model ParentsRules.Models.ChildrenWork
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<h4>ChildrenWork</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Chore" class="control-label"></label>
+                <input asp-for="Chore" class="form-control" />
+                <span asp-validation-for="Chore" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RoomID" class="control-label"></label>
+                <input asp-for="RoomID" class="form-control" />
+                <span asp-validation-for="RoomID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserID" class="control-label"></label>
+                <input asp-for="UserID" class="form-control" />
+                <span asp-validation-for="UserID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DollarAmount" class="control-label"></label>
+                <input asp-for="DollarAmount" class="form-control" />
+                <span asp-validation-for="DollarAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ParentID" class="control-label"></label>
+                <input asp-for="ParentID" class="form-control" />
+                <span asp-validation-for="ParentID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateDue" class="control-label"></label>
+                <input asp-for="DateDue" class="form-control" />
+                <span asp-validation-for="DateDue" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="Monday" /> @Html.DisplayNameFor(model => model.Monday)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="Tuesday" /> @Html.DisplayNameFor(model => model.Tuesday)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="Wednesday" /> @Html.DisplayNameFor(model => model.Wednesday)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="Thursday" /> @Html.DisplayNameFor(model => model.Thursday)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="Friday" /> @Html.DisplayNameFor(model => model.Friday)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="Saturday" /> @Html.DisplayNameFor(model => model.Saturday)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="Sunday" /> @Html.DisplayNameFor(model => model.Sunday)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="ChoreCompleted" /> @Html.DisplayNameFor(model => model.ChoreCompleted)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateChoreCompleted" class="control-label"></label>
+                <input asp-for="DateChoreCompleted" class="form-control" />
+                <span asp-validation-for="DateChoreCompleted" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="ParentVerified" /> @Html.DisplayNameFor(model => model.ParentVerified)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="ParentVerifiedDate" class="control-label"></label>
+                <input asp-for="ParentVerifiedDate" class="form-control" />
+                <span asp-validation-for="ParentVerifiedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ChoreID" class="control-label"></label>
+                <input asp-for="ChoreID" class="form-control" />
+                <span asp-validation-for="ChoreID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

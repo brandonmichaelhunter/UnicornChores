@@ -1,0 +1,53 @@
+﻿@model IEnumerable<FriendsRequestViewModel>
+@{
+    ViewData["Title"] = "Friend Requests";
+
+}
+
+<h4>@ViewData["Title"]</h4>
+
+<div class="row">
+    <div class="col-md-12">
+@if (Model != null)
+{
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Date Request Sent</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                    @foreach (var item in Model){
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FirstName)&nbsp;
+                                @Html.DisplayFor(modelItem => item.LastName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DateRequested)
+                            </td>
+                        </tr>
+                     }
+
+                 
+                
+            </tbody>
+        </table>
+}
+else
+{
+    <h3>Let's share by sending out a friend request </h3>
+
+}
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
