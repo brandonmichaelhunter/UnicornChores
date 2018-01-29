@@ -1,17 +1,17 @@
 ﻿@model ParentsRules.Models.ManageViewModels.IndexViewModel
 
 @{
-    ViewData["Title"] = "Parents";
+    ViewData["Title"] = "Administrators";
 
 }
 
-<h2>Parents</h2>
+<h2>Administrators</h2>
 <hr style="display: block;margin-top: 0.5em;margin-bottom: 0.5em;margin-left: auto;margin-right: auto;border-style: inset;border-width: 1px;">
 <div class="container">
     <div class="row">
 
-        <div class="col-sm-4"><a asp-action="Children">See Children</a></div>
-        <div class="col-sm-4"><a asp-action="FriendRequests">See My Parents Requests</a></div>
+        <div class="col-sm-4"><a asp-action="Children">View Children</a></div>
+        <div class="col-sm-4"><a asp-action="FriendRequests">See Adminstrator Requests</a></div>
         <div class="col-sm-4"><a asp-controller="Dashboard" asp-action="Index">Return to Dashboard</a></div>
     </div>
 </div>
@@ -20,7 +20,7 @@
 
         <div class="row">
             <div class="col-md-12 table-responsive-sm">
-                <h4>Parents associated with my account</h4>
+                <h4>Adminstrators</h4>
                 <table class="table">
                     <thead>
                         <tr>

@@ -1,7 +1,41 @@
 ﻿@using ParentsRules.Extensions;
 @using ParentsRules.Data;
-@model IEnumerable<ParentsRules.Models.CompletedChildrenWork>
+@model IEnumerable<ParentsRules.Models.CompletedChildrenWorkViewModel>
 @inject ApplicationDbContext _context
+@{ 
+   
+}
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"  type="text/javascript"></script>
+<script>
+    function toggleView(SectionID) {
+
+        var selectedEffect = "blind";
+        var options = {};
+        
+        $("#" + SectionID + "").toggle(selectedEffect, options, 500);
+    }
+</script>
+<style type="text/css">
+    .startWeekHeader {
+        background-color: #F2F509;
+        
+        color: white;
+        font-weight: bold;
+        width:100%;
+    }
+    .childWorkWeekProfile {
+        background-color: #046EEC;
+        color:white;
+        font-weight:bold;
+    }
+    .childWorkWeekProfileContainer {
+        width: 100%;
+    }
+
+</style>
 <h2>Completed Chores</h2>
 <hr style="display: block;margin-top: 0.5em;margin-bottom: 0.5em;margin-left: auto;margin-right: auto;border-style: inset;border-width: 1px;">
 <div class="container">
@@ -10,62 +44,93 @@
         <div class="col-sm-2"><a asp-controller="Dashboard" asp-action="Index">Return to Dashboard</a></div>
     </div>
 </div>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Day of the Week</th>
-            <th>
+<br/>
+<div class="container row">
+    @foreach (var item in Model)
+    {
 
-                @Html.DisplayNameFor(model => model.Chore)
-            </th>
-            <th>
-                Child
-            </th>
-            <th>
-                Chore Amount
-            </th>
-            <th>
-                Author
-            </th>
-            <th>
-                Chore Completed Date
-            </th>
+        <div >
+            <div class="row startWeekHeader "  >
+                <div class="col-sm-6"><a href="#" id="aBeginWeekDateLink" onclick="toggleView('@item.ID')">@item.StartOfWeekDateDisplay</a></div>
+                <div class="col-sm-6" style="color:blue">Total Week Payout: @item.TotalPayout.ToString("C")</div>
+            
+            </div>
+            <div class="collapse childWorkWeekProfileContainer row" id="@item.ID" >
+                @foreach (var childRec in item.WeekWorkHistory)
+                {
+                    
+                        string controlID = string.Format("workitemtable_{0}_{1}", item.ID, childRec.ID);
+                   
+                    <div class="">
+                        <a href="#" onclick="toggleView('@controlID')">
+                            <div class="col-sm-6 childWorkWeekProfile">Name:&nbsp;@childRec.ChildName</div>
+                            <div class="col-sm-6 childWorkWeekProfile">Total Earnings:&nbsp;@childRec.TotalWeekEarnings.ToString("C")</div>
+                        </a>
+                       
+                        <div class="collapse"  id="@controlID">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Day of the Week</th>
+                                        <th>
 
-        
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+                                            Chore
+                                        </th>
+                                        <th>
+                                            Child
+                                        </th>
+                                        <th>
+                                            Chore Amount
+                                        </th>
 
-            string DayName = "";
-            if (item.Monday) { DayName = "Monday"; }
-            else if (item.Tuesday) { DayName = "Tuesday"; }
-            else if (item.Wednesday) { DayName = "Wednesday"; }
-            else if (item.Thursday) { DayName = "Thursday"; }
-            else if (item.Friday) { DayName = "Friday"; }
-            else if (item.Saturday) { DayName = "Saturday"; }
-            else if (item.Sunday) { DayName = "Sunday"; }
-            <tr>
-                <td>@DayName</td>
-                <td>
-                    @ChoresExtensions.GetChoreName(_context, item.Chore)
-                </td>
-                <td>
-                    @ChoresExtensions.GetDisplayName(_context, item.UserID)
-                </td>
-                <td>
-                    @item.DollarAmount.ToString("C")
-                </td>
-                <td>
-                    @ChoresExtensions.GetDisplayName(_context, item.ParentID)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateChoreCompleted)
-                </td>
-              
-            </tr>
-        }
-    </tbody>
-</table>
+                                        <th>
+                                            Chore Completed Date
+                                        </th>
 
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var completedChore in childRec.CompletedChores)
+                                    {
+
+                                        string DayName = "";
+                                        if (completedChore.Monday) { DayName = "Monday"; }
+                                        else if (completedChore.Tuesday) { DayName = "Tuesday"; }
+                                        else if (completedChore.Wednesday) { DayName = "Wednesday"; }
+                                        else if (completedChore.Thursday) { DayName = "Thursday"; }
+                                        else if (completedChore.Friday) { DayName = "Friday"; }
+                                        else if (completedChore.Saturday) { DayName = "Saturday"; }
+                                        else if (completedChore.Sunday) { DayName = "Sunday"; }
+                                        <tr>
+                                            <td>@DayName</td>
+                                            <td>
+                                                @ChoresExtensions.GetChoreName(_context, completedChore.Chore)
+                                            </td>
+                                            <td>
+                                                @ChoresExtensions.GetDisplayName(_context, completedChore.UserID)
+                                            </td>
+                                            <td>
+                                                @completedChore.DollarAmount.ToString("C")
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => completedChore.DateChoreCompleted)
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+
+
+
+    }
+
+</div>
