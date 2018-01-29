@@ -24,7 +24,9 @@
         <dd>
             @ChoresExtensions.GetDisplayName(_context, Model.UserID)
         </dd>
-      
+        <dt>
+            @Html.DisplayNameFor(model => model.RoomID)
+        </dt>
         <dd>
             @ChoresExtensions.GetRoomName(_context, Model.RoomID)
         </dd>

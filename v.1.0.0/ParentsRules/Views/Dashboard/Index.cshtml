@@ -14,7 +14,7 @@
         <div class="col-sm-2"><a asp-controller="UserChores" asp-action="Create">Assign a Chore</a></div>
         <div class="col-sm-2"><a asp-controller="ChoreTypes" asp-action="Index">Manage Chore Types</a></div>
         
-        
+        <div class="col-sm-2"><a asp-controller="UserRooms" asp-action="Index">Manage Rooms</a></div>
         <div class="col-sm-2"><a asp-controller="Dashboard" asp-action="CompletedChores">Pending Completed Chores (@ViewData["PendingCompletedChores"].ToString())</a></div>
         <div class="col-sm-2"><a asp-controller="Dashboard" asp-action="AllCompletedChores">Completed Chores</a></div>
         <div class="col-sm-2"><a asp-controller="Friends" asp-action="Index">Manage Family</a></div>
@@ -39,8 +39,8 @@
                             <tr>
                                 <th scope="col">Published Status</th>
                                 <th scope="col">Chore</th>
-
-                                <th scope="col">Allowance</th>
+                                <th scope="col">Room</th>
+                                <th scope="col">Allowence</th>
                                 <th scope="col">Author</th>
                                 <th scope="col">Assigned Days</th>
                                 <th scope="col">Action</th>
@@ -64,7 +64,7 @@
                                 
                                 </td>
                                 <td>@ChoresExtensions.GetChoreName(_context, chore.Chore)</td>
-                                
+                                <td>@ChoresExtensions.GetRoomName(_context, chore.RoomID)</td>
                                 <td>@Html.DisplayFor(modelItem => chore.DollarAmount)</td>
                                 <td>@ChoresExtensions.GetDisplayName(_context, chore.ParentID)</td>
                                 <td><div>Monday: @Html.DisplayFor(modelItem => chore.Monday) &nbsp;Tuesday: @Html.DisplayFor(modelItem => chore.Tuesday)&nbsp;Wednesday: @Html.DisplayFor(modelItem => chore.Wednesday)&nbsp;Thursday: @Html.DisplayFor(modelItem => chore.Thursday)&nbsp;Friday: @Html.DisplayFor(modelItem => chore.Friday)&nbsp;Saturday: @Html.DisplayFor(modelItem => chore.Saturday)&nbsp;Sunday: @Html.DisplayFor(modelItem => chore.Sunday)</div></td>

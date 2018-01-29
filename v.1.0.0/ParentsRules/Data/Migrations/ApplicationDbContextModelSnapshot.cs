@@ -247,10 +247,6 @@ namespace ParentsRules.Data.Migrations
 
                     b.Property<bool>("SaturdayCompleted");
 
-                    b.Property<DateTime>("StartOfWeekDate");
-
-                    b.Property<string>("StartOfWeekDateDisplay");
-
                     b.Property<bool>("Sunday");
 
                     b.Property<bool>("SundayCompleted");
@@ -391,10 +387,6 @@ namespace ParentsRules.Data.Migrations
                     b.Property<bool>("Saturday");
 
                     b.Property<bool>("SaturdayCompleted");
-
-                    b.Property<DateTime>("StartOfWeekDate");
-
-                    b.Property<string>("StartOfWeekDateDisplay");
 
                     b.Property<bool>("Sunday");
 

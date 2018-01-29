@@ -24,7 +24,9 @@
         <dt>
             @Html.DisplayNameFor(model => model.RoomID)
         </dt>
-
+        <dd>
+            @ChoresExtensions.GetRoomName(_context, Model.RoomID)
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.DollarAmount)
         </dt>

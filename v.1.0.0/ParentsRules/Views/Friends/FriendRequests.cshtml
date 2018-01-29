@@ -1,16 +1,13 @@
 ﻿@model ParentsRules.Models.ManageViewModels.FriendsRequestViewModel
-@{
-    ViewData["Title"] = "Active Administrator Request";
 
-}
-<h2>Active Administrator Requests</h2>
+<h2>Active Friend Requests</h2>
 
 <hr style="display: block;margin-top: 0.5em;margin-bottom: 0.5em;margin-left: auto;margin-right: auto;border-style: inset;border-width: 1px;">
 <div class="container">
     <div class="row">
-        <div class="col-sm-3"><a asp-action="Create">Request to add an Administrator</a></div>
-        <div class="col-sm-3"><a asp-action="Children">View Children</a></div>
-        <div class="col-sm-3"><a asp-action="Index">View Administrators</a></div>
+        <div class="col-sm-3"><a asp-action="Create">Make a Friend Request</a></div>
+        <div class="col-sm-3"><a asp-action="Children">See Children</a></div>
+        <div class="col-sm-3"><a asp-action="Index">See Parents</a></div>
         <div class="col-sm-3"><a asp-controller="Dashboard" asp-action="Index">Return to Dashboard</a></div>
     </div>
 </div>
@@ -42,7 +39,7 @@
                             <td>
                                 @Html.DisplayFor(modelItem => friendRequest.DateRequested)
                             </td>
-                            <td><a asp-action="Delete" asp-route-id="@friendRequest.ID">Delete Administrator Request</a></td>
+                            <td><a asp-action="Delete" asp-route-id="@friendRequest.ID">Delete Friend Request</a></td>
                         </tr>
 
                     }

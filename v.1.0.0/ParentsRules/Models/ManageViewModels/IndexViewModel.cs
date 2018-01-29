@@ -23,11 +23,11 @@ namespace ParentsRules.Models.ManageViewModels
         public string StatusMessage { get; set; }
 
         [EmailAddress]
-        [Display(Name = "Email")]
+        [Display(Name = "Parent's Email")]
         public string AssociatedUserEmail { get; set; }
-        [Display(Name = "PFirst Name")]
+        [Display(Name = "Parent's First Name")]
         public string AssociatedUserFirstName { get; set; }
-        [Display(Name = "Last Name")]
+        [Display(Name = "Parent's Last Name")]
         public String AssociatedUserLastName { get; set; }
 
         /* Stores a list users linked to current user. */

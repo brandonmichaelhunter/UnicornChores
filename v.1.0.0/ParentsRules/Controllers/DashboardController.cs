@@ -13,7 +13,6 @@ using ParentsRules.Models.Chroes;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
-using ParentsRules.Services;
 
 namespace ParentsRules.Controllers
 {
@@ -335,9 +334,7 @@ namespace ParentsRules.Controllers
                             TotalEarned = pendingchore.TotalEarned,
                             DateChoreCompleted = pendingchore.DateChoreCompleted,
                             ChoreCompleted = pendingchore.ChoreCompleted,
-                            ChildCompleted = pendingchore.ChildCompleted,
-                            StartOfWeekDate = UtilityService.GetFirstDayOfWeek(DateTime.Now),
-                            StartOfWeekDateDisplay = UtilityService.GetFirstDayOfWeek(DateTime.Now).ToString("MM/dd/yyyy")
+                            ChildCompleted = pendingchore.ChildCompleted
                         };
                         _context.CompletedChildWorkList.Add(completedChore);
                         //Save Completed Task to Archive table
@@ -401,7 +398,7 @@ namespace ParentsRules.Controllers
             {
                 //Retrieve completed chores.
                 List<CompletedChildrenWork> completedChores = new List<CompletedChildrenWork>();
-                List<CompletedChildrenWorkViewModel> completedChoresViewList = new List<CompletedChildrenWorkViewModel>();
+
                 var user = await _userManager.GetUserAsync(User);
                 if (user == null)
                 {
@@ -417,64 +414,16 @@ namespace ParentsRules.Controllers
                     {
                         foreach (string parent in parents)
                         {
-                            completedChores.AddRange(_context.CompletedChildWorkList.Where(c => c.ParentID == parent &&  c.ParentVerified == true).OrderBy(d => d.UserID).OrderByDescending(e => e.DateChoreCompleted).ToList<CompletedChildrenWork>());
+                            completedChores.AddRange(_context.CompletedChildWorkList.Where(c => c.ParentID == parent &&  c.ParentVerified == true).OrderBy(d => d.UserID).OrderBy(e => e.DateChoreCompleted).ToList<CompletedChildrenWork>());
                         }
-                    }
-                    // Build out Completed Chores dataset.
-                    var startWeekDatesList = completedChores.GroupBy(b => b.StartOfWeekDateDisplay).ToList();
-                    
-                    
-                    
-                    
-                    CompletedChildrenWorkViewModel rec;
-                    int counterID = 0;
-                    for(int f = 0; f <= startWeekDatesList.Count - 1; f++)
-                    {
-                        string startWeekDate = startWeekDatesList[f].Key;
-                        
-                        /* Search for chores where the StartOfWeekDateDisplay equals to startWeekDate */
-                        List<CompletedChildrenWork> queryChores = completedChores.Where(a => a.StartOfWeekDateDisplay == startWeekDate).ToList();
-
-                        // Get a unique list of children that has completed chores from the queryChores list.
-                        List<string> childrenIDs = queryChores.Select(a => a.UserID).Distinct().ToList<string>();
-
-                        // Get the child complete earnings and complete chores info.
-                        List<CompletedChildWorkEarningsViewModel> childrenWorkWeekHistory = new List<CompletedChildWorkEarningsViewModel>();
-                        int childCounterRecID = 0;
-                        foreach (string childID in childrenIDs){
-                            var childProfile = _context.AccountUsers.Where(a => a.Id == childID).FirstOrDefault();
-                            string childDisplayName = string.Empty;
-                            if (childProfile != null){
-                                childDisplayName = string.Format("{0} {1} {2}", childProfile.FirstName, childProfile.MiddleName, childProfile.LastName);
-                            }
-                            float totalWeekEarnings = queryChores.Where(b => b.UserID == childID).Sum(c => c.DollarAmount);
-                            List<CompletedChildrenWork> childCompletedChores = queryChores.Where(d => d.UserID == childID).ToList();
-                            childrenWorkWeekHistory.Add(new CompletedChildWorkEarningsViewModel() { ChildID = childID, TotalWeekEarnings = totalWeekEarnings, ChildName = childDisplayName, CompletedChores = childCompletedChores });
-                        }
-                        
-                        // Add unique ids
-                        for (int x = 0; x <= childrenWorkWeekHistory.Count - 1; x++){
-                            childCounterRecID = childCounterRecID + 1;
-                            childrenWorkWeekHistory[x].ID = childCounterRecID;
-                        }
-
-                        counterID = counterID + 1;
-                        rec = new CompletedChildrenWorkViewModel();
-                        rec.ID = counterID;
-                        rec.StartOfWeekDateDisplay = startWeekDate;
-                        rec.TotalPayout = queryChores.Sum(e => e.DollarAmount);
-                        rec.WeekWorkHistory = childrenWorkWeekHistory;
-                        completedChoresViewList.Add(rec);
                     }
 
                     //Get Pending completed chores count
                     ViewData["PendingCompletedChores"] = GetPendingCompletedChores(user.Id).Count;
-                    //Get Begining Week Day for chores
-                    
 
                 }
 
-                return View(completedChoresViewList.AsEnumerable());
+                return View(completedChores.AsEnumerable());
             }
             catch (Exception ex)
             {
