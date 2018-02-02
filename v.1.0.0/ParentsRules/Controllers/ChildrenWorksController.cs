@@ -398,7 +398,7 @@ namespace ParentsRules.Controllers
                 }
                
                 var childID = user.Id;
-                string message = string.Format("Unicorn Chores: {0} has completed the following chores: {1}. Click on this link https://tinyurl.com/1zq to confirm that {0} chore(s) has been completed.", user.FirstName, String.Join(",", completedchoreList.ToArray<string>()));
+                string message = string.Format("Unicorn Chores: {0} has completed the following chores: {1}. Click on this link https://goo.gl/1kNbd6 to confirm that {0} chore(s) has been completed.", user.FirstName, String.Join(",", completedchoreList.ToArray<string>()));
                 //Get parents ids as well.
                 List<AccountAssociations> parentIDs = _context.AccountAssociations.Where(a => a.AssociatedUserID == childID).ToList<AccountAssociations>();
                 if(parentIDs.Count != 0)
