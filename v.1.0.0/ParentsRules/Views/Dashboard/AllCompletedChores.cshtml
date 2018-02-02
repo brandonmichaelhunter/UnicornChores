@@ -1,71 +1,146 @@
 ﻿@using ParentsRules.Extensions;
 @using ParentsRules.Data;
-@model IEnumerable<ParentsRules.Models.CompletedChildrenWork>
+@model IEnumerable<ParentsRules.Models.CompletedChildrenWorkViewModel>
 @inject ApplicationDbContext _context
+@{ 
+    ViewData["Title"] = "Completed Chores";
+}
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"  type="text/javascript"></script>
+<script>
+    function toggleView(SectionID) {
+
+        var selectedEffect = "blind";
+        var options = {};
+        
+        //$("#" + SectionID + "").toggle(selectedEffect, options, 300);
+
+        
+            if ($('#'+ SectionID +':visible').length)
+                $('#' + SectionID +'').hide("slide", { direction: "up" }, 100);
+            else
+                $('#' + SectionID + '').show("slide", { direction: "up" }, 100);
+        
+    }
+</script>
+<style type="text/css">
+    .startWeekHeader {
+        background-color: #F2F509;
+        color: white;
+        font-weight: bold;
+  
+    }
+    .childWorkWeekProfile {
+        background-color: #E7EDEB;
+        color: #00A4FF;
+        font-weight: bold;#337ab7
+    }
+    .childWorkWeekProfileContainer {
+        /*width: 100%;*/
+    }
+
+</style>
 <h2>Completed Chores</h2>
 <hr style="display: block;margin-top: 0.5em;margin-bottom: 0.5em;margin-left: auto;margin-right: auto;border-style: inset;border-width: 1px;">
-<div class="container">
+<div class="container row">
     <div class="row">
         <div class="col-sm-2"><a asp-controller="Dashboard" asp-action="CompletedChores">Pending Completed Chores (@ViewData["PendingCompletedChores"].ToString())</a></div>
         <div class="col-sm-2"><a asp-controller="Dashboard" asp-action="Index">Return to Dashboard</a></div>
     </div>
 </div>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Day of the Week</th>
-            <th>
+<br/>
+<div class="container ">
+    <div class="" style="background-color:#7591BF; border-radius:15px 15px 0px 0px; color:white;  font-weight:bold; height:30px; margin-right:0px; margin-left:0px;">
+        <div class="" style="padding-left:1%;height:20px;padding-top:0.5%">Completed Chores</div>
+    </div>
+    @foreach (var item in Model)
+    {
 
-                @Html.DisplayNameFor(model => model.Chore)
-            </th>
-            <th>
-                Child
-            </th>
-            <th>
-                Chore Amount
-            </th>
-            <th>
-                Author
-            </th>
-            <th>
-                Chore Completed Date
-            </th>
+        <div class="" >
+            
+            <div class=" startWeekHeader" style=""  >
+                <div class="col-sm-6 " style="color:#337ab7;background-color:lightgray"><a href="#" id="aBeginWeekDateLink"  onclick="toggleView('@item.ID')">@item.StartOfWeekDateDisplay</a></div>
+                <div class="col-sm-6 " style="color:#337ab7;background-color:lightgray">Total Week Payout: @item.TotalPayout.ToString("C")</div>
+            
+            </div>
+            <div class="collapse" id="@item.ID" >
+                @foreach (var childRec in item.WeekWorkHistory)
+                {
 
-        
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+                    string controlID = string.Format("workitemtable_{0}_{1}", item.ID, childRec.ID);
 
-            string DayName = "";
-            if (item.Monday) { DayName = "Monday"; }
-            else if (item.Tuesday) { DayName = "Tuesday"; }
-            else if (item.Wednesday) { DayName = "Wednesday"; }
-            else if (item.Thursday) { DayName = "Thursday"; }
-            else if (item.Friday) { DayName = "Friday"; }
-            else if (item.Saturday) { DayName = "Saturday"; }
-            else if (item.Sunday) { DayName = "Sunday"; }
-            <tr>
-                <td>@DayName</td>
-                <td>
-                    @ChoresExtensions.GetChoreName(_context, item.Chore)
-                </td>
-                <td>
-                    @ChoresExtensions.GetDisplayName(_context, item.UserID)
-                </td>
-                <td>
-                    @item.DollarAmount.ToString("C")
-                </td>
-                <td>
-                    @ChoresExtensions.GetDisplayName(_context, item.ParentID)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateChoreCompleted)
-                </td>
-              
-            </tr>
-        }
-    </tbody>
-</table>
+                    <div class="nameRow" style="max-width:100%; max-height:152px !important">
+                        <a href="#" onclick="toggleView('@controlID')">
+                            <div class="col-sm-6 childWorkWeekProfile">Name:&nbsp;@childRec.ChildName</div>
+                            <div class="col-sm-6 childWorkWeekProfile">Total Earnings:&nbsp;@childRec.TotalWeekEarnings.ToString("C")</div>
+                        </a>
+                    </div>
+                        <div class="collapse detailsRow"  style="max-width:100%; max-height:152px !important"  id="@controlID">
+                            <table class="table table-striped" style="border-top: 1px solid black;">
+                                <thead>
+                                    <tr>
+                                        <th>Day of the Week</th>
+                                        <th>
 
+                                            Chore
+                                        </th>
+                                        <th>
+                                            Child
+                                        </th>
+                                        <th>
+                                            Chore Amount
+                                        </th>
+
+                                        <th>
+                                            Chore Completed Date
+                                        </th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var completedChore in childRec.CompletedChores)
+                                    {
+
+                                        string DayName = "";
+                                        if (completedChore.Monday) { DayName = "Monday"; }
+                                        else if (completedChore.Tuesday) { DayName = "Tuesday"; }
+                                        else if (completedChore.Wednesday) { DayName = "Wednesday"; }
+                                        else if (completedChore.Thursday) { DayName = "Thursday"; }
+                                        else if (completedChore.Friday) { DayName = "Friday"; }
+                                        else if (completedChore.Saturday) { DayName = "Saturday"; }
+                                        else if (completedChore.Sunday) { DayName = "Sunday"; }
+                                        <tr>
+                                            <td>@DayName</td>
+                                            <td>
+                                                @ChoresExtensions.GetChoreName(_context, completedChore.Chore)
+                                            </td>
+                                            <td>
+                                                @ChoresExtensions.GetDisplayName(_context, completedChore.UserID)
+                                            </td>
+                                            <td>
+                                                @completedChore.DollarAmount.ToString("C")
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => completedChore.DateChoreCompleted)
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    
+
+                }
+            </div>
+        </div>
+
+
+
+    }
+
+</div>
