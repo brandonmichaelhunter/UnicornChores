@@ -13,6 +13,7 @@ using ParentsRules.Models.Rooms;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
+using ParentsRules.Services;
 
 namespace ParentsRules.Controllers
 {
@@ -287,6 +288,7 @@ namespace ParentsRules.Controllers
                 }
                 userChores.ParentID = user.Id;
                 userChores.PublishStatus = "Not Published";
+                
                 _context.Add(userChores);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Dashboard");
@@ -499,7 +501,9 @@ namespace ParentsRules.Controllers
                             Thursday = false,
                             Friday = false,
                             Saturday = false,
-                            Sunday = false
+                            Sunday = false,
+                            StartOfWeekDate = UtilityService.GetFirstDayOfWeek(DateTime.Now),
+                            StartOfWeekDateDisplay = UtilityService.GetFirstDayOfWeek(DateTime.Now).ToString("MM/dd/yyyy")
                         };
                         _context.ChildWorkList.Add(workitem);
                     }
@@ -520,7 +524,9 @@ namespace ParentsRules.Controllers
                             Thursday = false,
                             Friday = false,
                             Saturday = false,
-                            Sunday = false
+                            Sunday = false,
+                            StartOfWeekDate = UtilityService.GetFirstDayOfWeek(DateTime.Now),
+                            StartOfWeekDateDisplay = UtilityService.GetFirstDayOfWeek(DateTime.Now).ToString("MM/dd/yyyy")
                         };
                         _context.ChildWorkList.Add(workitem);
                     }
@@ -541,7 +547,9 @@ namespace ParentsRules.Controllers
                             Thursday = false,
                             Friday = false,
                             Saturday = false,
-                            Sunday = false
+                            Sunday = false,
+                            StartOfWeekDate = UtilityService.GetFirstDayOfWeek(DateTime.Now),
+                            StartOfWeekDateDisplay = UtilityService.GetFirstDayOfWeek(DateTime.Now).ToString("MM/dd/yyyy")
                         };
                         _context.ChildWorkList.Add(workitem);
                     }
@@ -562,7 +570,9 @@ namespace ParentsRules.Controllers
                             Thursday = true,
                             Friday = false,
                             Saturday = false,
-                            Sunday = false
+                            Sunday = false,
+                            StartOfWeekDate = UtilityService.GetFirstDayOfWeek(DateTime.Now),
+                            StartOfWeekDateDisplay = UtilityService.GetFirstDayOfWeek(DateTime.Now).ToString("MM/dd/yyyy")
                         };
                         _context.ChildWorkList.Add(workitem);
                     }
@@ -583,7 +593,9 @@ namespace ParentsRules.Controllers
                             Thursday = false,
                             Friday = true,
                             Saturday = false,
-                            Sunday = false
+                            Sunday = false,
+                            StartOfWeekDate = UtilityService.GetFirstDayOfWeek(DateTime.Now),
+                            StartOfWeekDateDisplay = UtilityService.GetFirstDayOfWeek(DateTime.Now).ToString("MM/dd/yyyy")
                         };
                         _context.ChildWorkList.Add(workitem);
                     }
@@ -604,7 +616,9 @@ namespace ParentsRules.Controllers
                             Thursday = false,
                             Friday = false,
                             Saturday = true,
-                            Sunday = false
+                            Sunday = false,
+                            StartOfWeekDate = UtilityService.GetFirstDayOfWeek(DateTime.Now),
+                            StartOfWeekDateDisplay = UtilityService.GetFirstDayOfWeek(DateTime.Now).ToString("MM/dd/yyyy")
                         };
                         _context.ChildWorkList.Add(workitem);
                     }
@@ -625,7 +639,9 @@ namespace ParentsRules.Controllers
                             Thursday = false,
                             Friday = false,
                             Saturday = false,
-                            Sunday = true
+                            Sunday = true,
+                            StartOfWeekDate = UtilityService.GetFirstDayOfWeek(DateTime.Now),
+                            StartOfWeekDateDisplay = UtilityService.GetFirstDayOfWeek(DateTime.Now).ToString("MM/dd/yyyy")
                         };
                         _context.ChildWorkList.Add(workitem);
                     }

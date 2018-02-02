@@ -24,10 +24,7 @@
                 <select asp-for="Chore" class="form-control" asp-items="@ViewBag.Chores"></select>
                 <span asp-validation-for="Chore" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="RoomID" class="control-label">Select a Room (Optional)</label>
-                <select asp-for="RoomID" class="form-control" asp-items="@ViewBag.Rooms"></select>
-            </div>
+
 
             <div class="form-group">
                 <label asp-for="DollarAmount" class="control-label">What is the dollar amount to complete this task? (Optional)</label>

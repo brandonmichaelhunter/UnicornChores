@@ -37,5 +37,7 @@ namespace ParentsRules.Models
         public DateTime? ParentVerifiedDate { get; set; }
         public int ChoreID { get; set; }
         public float TotalEarned { get; set; }
+        public DateTime StartOfWeekDate { get; set; }
+        public string StartOfWeekDateDisplay { get; set; }
     }
 }

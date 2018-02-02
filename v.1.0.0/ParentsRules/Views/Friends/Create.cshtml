@@ -1,12 +1,11 @@
 ﻿@model ParentsRules.Models.ManageViewModels.IndexViewModel
 
 
-<h4>Create a Friend Request</h4>
+<h4>Create a request to an administrator</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form method="post">
-            <h3>Make a Friend Request</h3>
             <!-- Shows people who are associated with this account.-->
             <div class="form-group">
                 <label asp-for="Email"></label>
@@ -22,7 +21,7 @@
                 <label asp-for="AssociatedUserLastName"></label>
                 <input asp-for="AssociatedUserLastName" class="form-control" />
                 <span asp-validation-for="AssociatedUserLastName" class="text-danger"></span>
-                <button asp-action="SendFriendRequest" class="btn btn-link">Send Parent Requests</button>
+                <button asp-action="SendFriendRequest" class="btn btn-link">Send registration request for a new administartor</button>
             </div>
         </form>
     </div>
