@@ -63,7 +63,9 @@
                                 }
                                 
                                 </td>
-                                <td>@ChoresExtensions.GetChoreName(_context, chore.Chore)</td>
+                                <td><div>@ChoresExtensions.GetChoreName(_context, chore.Chore)</div>
+                                <div>Description: @chore.ChoreDescription</div>
+                                </td>
                                 
                                 <td>@Html.DisplayFor(modelItem => chore.DollarAmount)</td>
                                 <td>@ChoresExtensions.GetDisplayName(_context, chore.ParentID)</td>

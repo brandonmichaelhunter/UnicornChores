@@ -11,7 +11,9 @@ namespace ParentsRules.Models.Chroes
         public int ID { get; set; }
         [Required(ErrorMessage ="A chore must be selected.")]
         public string Chore { get; set; }
-        
+        [Display(Name ="Description")]
+        [DataType(DataType.MultilineText)]
+        public string ChoreDescription { get; set; }
         public int RoomID { get; set; }
         [Required(ErrorMessage ="A child must be selected for the chore")]
         public string UserID { get; set; }

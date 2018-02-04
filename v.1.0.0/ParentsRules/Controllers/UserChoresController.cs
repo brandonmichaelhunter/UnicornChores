@@ -66,34 +66,7 @@ namespace ParentsRules.Controllers
 
             return retList;
         }
-        private List<SelectListItem> GetRooms(int SetSelectedRoomID = -1)
-        {
-            List<UserRooms> rooms = _context.UserRooms.ToList<UserRooms>();
-            List<SelectListItem> retList = new List<SelectListItem>();
-            rooms.ForEach(delegate (UserRooms room)
-            {
-                if(SetSelectedRoomID != -1)
-                {
-                    if(room.ID == SetSelectedRoomID)
-                    {
-                        retList.Add(new SelectListItem() { Value = room.ID.ToString(), Text = room.Room, Selected=true });
-                    }
-                    else
-                    {
-                        retList.Add(new SelectListItem() { Value = room.ID.ToString(), Text = room.Room });
-                    }
-                }
-                else
-                {
-                    retList.Add(new SelectListItem() { Value = room.ID.ToString(), Text = room.Room });
-                }
-                
-            });
-            if(SetSelectedRoomID == -1)
-                retList.Insert(0, new SelectListItem() { Value = "", Text = "Select a Room", Selected = true });
-
-            return retList;
-        }
+        
         private List<SelectListItem> GetKids(string UserID, string SetSelectedChildID = null)
         {
             //Get a list of kids that is associated with the current user.
@@ -257,8 +230,8 @@ namespace ParentsRules.Controllers
                 //Get a list user created chores
                 ViewBag.Chores = GetChoreTypes();
 
-                // Get a list of rooms
-                ViewBag.Rooms = GetRooms();
+                
+                
 
                 //Get the current user ID value.
                 ViewBag.CurrentUserID = user.Id;
@@ -277,7 +250,7 @@ namespace ParentsRules.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("ID,Chore,RoomID,UserID,DollarAmount,ParentID,DateDue,IsDaily,IsWeekly,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday")] UserChores userChores)
+        public async Task<IActionResult> Create([Bind("ID,Chore,RoomID,UserID,ChoreDescription,DollarAmount,ParentID,DateDue,IsDaily,IsWeekly,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday")] UserChores userChores)
         {
             try
             {
@@ -327,8 +300,6 @@ namespace ParentsRules.Controllers
                 //Get a list user created chores
                 ViewBag.Chores = GetChoreTypes(Convert.ToInt16(userChores.Chore));
 
-                // Get a list of rooms
-                ViewBag.Rooms = GetRooms(userChores.RoomID);
 
                 //Get the current user ID value.
                 ViewBag.CurrentUserID = user.Id;
@@ -355,7 +326,7 @@ namespace ParentsRules.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Chore,RoomID,UserID,DollarAmount,ParentID,DateDue,IsDaily,IsWeekly,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday")] UserChores userChores)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Chore,RoomID,ChoreDescription,UserID,DollarAmount,ParentID,DateDue,IsDaily,IsWeekly,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday")] UserChores userChores)
         {
             try
             {
@@ -397,8 +368,6 @@ namespace ParentsRules.Controllers
                 //Get a list user created chores
                 ViewBag.Chores = GetChoreTypes(Convert.ToInt16(userChores.Chore));
 
-                // Get a list of rooms
-                ViewBag.Rooms = GetRooms(userChores.RoomID);
 
                 //Get the current user ID value.
                 ViewBag.CurrentUserID = user.Id;

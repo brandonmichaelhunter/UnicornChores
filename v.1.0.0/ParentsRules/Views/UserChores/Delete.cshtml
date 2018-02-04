@@ -14,16 +14,19 @@
     <hr />
     <dl class="dl-horizontal">
 
-
+        <dt>
+            Description:
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ChoreDescription)
+        </dd>
         <dt class="text-left">
             Assigned To
         </dt>
         <dd>
             @ChoresExtensions.GetDisplayName(_context, Model.UserID)
         </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.RoomID)
-        </dt>
+        
 
         <dt>
             @Html.DisplayNameFor(model => model.DollarAmount)
@@ -37,12 +40,7 @@
         <dd>
             @ChoresExtensions.GetDisplayName(_context, Model.ParentID)
         </dd>
-        <dt>
-            Chore Assigned Due Date
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.DateDue)
-        </dd>
+        
         <dt>
             Assigned Days
         </dt>
