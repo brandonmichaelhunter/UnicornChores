@@ -280,6 +280,7 @@ namespace ParentsRules.Controllers
                         childchore.ID = choreItem.ID;
                         childchore.Chore = choreItem.Chore;
                         childchore.ChoreID = choreItem.ChoreID;
+                        childchore.ChoreDescription = choreItem.ChoreDescription;
                         childchore.Monday = (choreItem.Monday) ? true : childchore.Monday;
                     
                         childchore.Tuesday = (choreItem.Tuesday) ? true : childchore.Tuesday;

@@ -25,7 +25,8 @@ namespace ParentsRules.Models.Chroes
         public int SaturdayCompletedStatus { get; set; }
         public bool Sunday { get; set; }
         public int SundayCompletedStatus { get; set; }
-
+        [Display(Name = "Description")]
+        public string ChoreDescription { get; set; }
         [DisplayFormat(DataFormatString = "{0:C0}")]
         public string MondayAllowence { get; set; }
         [DisplayFormat(DataFormatString = "{0:C0}")]

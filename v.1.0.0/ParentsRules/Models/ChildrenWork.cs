@@ -43,6 +43,8 @@ namespace ParentsRules.Models
         public float TotalEarned { get; set; }
         public DateTime StartOfWeekDate { get; set; }
         public string StartOfWeekDateDisplay { get; set; }
+        [Display(Name ="Description")]
+        public string ChoreDescription { get; set; }
     }
 }
 
