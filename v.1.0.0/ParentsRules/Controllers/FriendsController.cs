@@ -13,23 +13,41 @@ using ParentsRules.Models;
 using Microsoft.Extensions.Logging;
 using ParentsRules.Services;
 using ParentsRules.Models.Chroes;
+using ParentsRules.Actions;
+using System.IO;
+using System.Threading;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.WindowsAzure; // Namespace for CloudConfigurationManager
+using Microsoft.WindowsAzure.Storage; // Namespace for CloudStorageAccount
+using Microsoft.WindowsAzure.Storage.Blob; // Namespace for Blob storage types
+using Microsoft.Azure;
+using Microsoft.Extensions.Options;
 
 namespace ParentsRules.Controllers
 {
     [Authorize]
     public class FriendsController : Controller
     {
+        private readonly IFileProvider _fileProvider;
+        private readonly string _blobContainerName = "unicornchoresimages";
+        private readonly string _blobBlockBlobName = "profilephotos";
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger _logger;
         private readonly IEmailSender _emailSender;
-        public FriendsController(IEmailSender emailSender, ILogger<ManageController> logger, UserManager<ApplicationUser> userManager, ApplicationDbContext context)
+        private CloudStorageAccount _cloudStorageAccount;
+        public FriendsController(IEmailSender emailSender, ILogger<ManageController> logger, UserManager<ApplicationUser> userManager, ApplicationDbContext context, IFileProvider fileProvider, IOptions<AzureStorageSettings> settings)
         {
             _context = context;
             _emailSender = emailSender;
             _logger = logger;
             _userManager = userManager;
+            _fileProvider = fileProvider;
+            _cloudStorageAccount = CloudStorageAccount.Parse(settings.Value.ConnectionString);
+
         }
+
+
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -56,7 +74,7 @@ namespace ParentsRules.Controllers
                 _logger.LogError(string.Format("{0} - Error Message: {1}", System.Reflection.MethodBase.GetCurrentMethod(), ex.Message));
                 return RedirectToAction("Index", "StatusCode", 500);
             }
-            
+
         }
         public async Task<IActionResult> FriendRequests()
         {
@@ -68,7 +86,7 @@ namespace ParentsRules.Controllers
                     throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
                 }
 
-               
+
 
                 /* Query the user's active friend requests. */
                 ViewData["FriendRequests"] = GetUserFriendRequests(user.Id).AsEnumerable();
@@ -92,15 +110,27 @@ namespace ParentsRules.Controllers
                 {
                     throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
                 }
+                // Retrieve child associated with the current user.
+                List<string> userChildrenIDs = _context.AccountAssociations.Where(a => a.PrimaryUserID == user.Id && a.IsChild).Select(b => b.AssociatedUserID).Distinct().ToList<string>();
+                // Retrieve the friends of the current user.
+                List<string> userFriendIDs = _context.AccountAssociations.Where(c => c.PrimaryUserID == user.Id && c.IsChild == false).Select(d => d.AssociatedUserID).Distinct().ToList<string>();
 
+                //Retrieve children that is associated with friends of the current user.
+                foreach (string friendID in userFriendIDs)
+                {
+                    List<string> associatedChildrenIDs = _context.AccountAssociations.Where(e => e.PrimaryUserID == friendID && e.IsChild == true).Select(f => f.AssociatedUserID).Distinct().ToList<string>();
+                    userChildrenIDs.AddRange(associatedChildrenIDs);
+
+                }
+                //TODO: need to figure out why this is not showing all children on this view.
                 //Get the children for the current user.
-                List<string> childrenIDs = _context.AccountAssociations.Where(a => a.PrimaryUserID == user.Id && a.IsChild == true).Select(b => b.AssociatedUserID).Distinct().ToList<string>();
+                List<string> childrenIDs = userChildrenIDs.Select(a => a.ToString()).Distinct().ToList<string>(); //_context.AccountAssociations.Where(a => a.PrimaryUserID == user.Id && a.IsChild == true).Select(b => b.AssociatedUserID).Distinct().ToList<string>();
                 List<ApplicationUser> childrenProfiles = new List<ApplicationUser>();
                 ApplicationUser child;
                 foreach (string childID in childrenIDs)
                 {
                     child = _context.AccountUsers.Where(c => c.Id == childID).FirstOrDefault();
-                    if(child != null)
+                    if (child != null)
                     {
                         childrenProfiles.Add(child);
                     }
@@ -108,14 +138,16 @@ namespace ParentsRules.Controllers
 
                 // Get children for the current user related family members.
                 List<ApplicationUser> familyMembersChildrenProfiles = new List<ApplicationUser>();
-                
+
                 List<string> familyMemberIDs = _context.AccountAssociations.Where(d => d.PrimaryUserID == user.Id && d.IsChild == false).Select(e => e.AssociatedUserID).Distinct().ToList<string>();
-                foreach(string familyMemberID in familyMemberIDs)
+                foreach (string familyMemberID in familyMemberIDs)
                 {
                     //Look up the children related to this family member.
-                    _context.AccountAssociations.Where(f => f.PrimaryUserID == familyMemberID && f.IsChild == true).Select(h => h.AssociatedUserID).Distinct().ToList<string>().ForEach(delegate(string childID) {
-                        childrenProfiles.ForEach(delegate (ApplicationUser childProfile) {
-                            if(childProfile.Id != childID)
+                    _context.AccountAssociations.Where(f => f.PrimaryUserID == familyMemberID && f.IsChild == true).Select(h => h.AssociatedUserID).Distinct().ToList<string>().ForEach(delegate (string childID)
+                    {
+                        childrenProfiles.ForEach(delegate (ApplicationUser childProfile)
+                        {
+                            if (childProfile.Id != childID)
                             {
                                 //Add the new child
                                 child = _context.AccountUsers.Where(c => c.Id == childID).FirstOrDefault();
@@ -132,13 +164,13 @@ namespace ParentsRules.Controllers
                 List<ApplicationUser> children = (from c in childrenProfiles select c).Distinct().ToList();
                 //Load the children profile records into the return view model
                 List<ChildrenViewModel> childrenList = new List<ChildrenViewModel>();
-  
+
                 foreach (ApplicationUser childProfile in children)
                 {
 
-                    childrenList.Add(new ChildrenViewModel() { ID = childProfile.Id, FirstName = childProfile.FirstName, MiddleName = childProfile.MiddleName, LastName = childProfile.LastName, Username = childProfile.UserName });
+                    childrenList.Add(new ChildrenViewModel() { ID = childProfile.Id, FirstName = childProfile.FirstName, MiddleName = childProfile.MiddleName, LastName = childProfile.LastName, Username = childProfile.UserName, ProfilePhotoUrl = childProfile.PhotoUrl });
                 }
-                
+
 
 
                 return View(childrenList.AsEnumerable());
@@ -148,7 +180,7 @@ namespace ParentsRules.Controllers
                 _logger.LogError(string.Format("{0} - Error Message: {1}", System.Reflection.MethodBase.GetCurrentMethod(), ex.Message));
                 return RedirectToAction("Index", "StatusCode", 500);
             }
-        
+
 
         }
         [HttpGet]
@@ -165,7 +197,8 @@ namespace ParentsRules.Controllers
             return View(model);
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
+        //[DisableFormValueModelBinding]
         public async Task<IActionResult> CreateChild(ChildrenViewModel model)
         {
             try
@@ -182,16 +215,33 @@ namespace ParentsRules.Controllers
                 var result = await _userManager.CreateAsync(child, model.Password);
                 if (result.Succeeded)
                 {
-                    /* Automatically confirm the childs email.*/
+                    // Create a blob client instance.
+                    CloudBlobClient blobClient = _cloudStorageAccount.CreateCloudBlobClient();
+                    
+                    // Retrieve a reference to a container.
+                    CloudBlobContainer container = blobClient.GetContainerReference(_blobContainerName);
+
+                    // Create the container if it doesn't already exist.
+                    await container.CreateIfNotExistsAsync();
+                    await container.SetPermissionsAsync(new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Container });
+                    
+                    // Retrieve reference to a blob named "myblob".
+                    CloudBlockBlob blockBlob = container.GetBlockBlobReference(model.ProfilePicture.FileName);
+                    
+                    // Upload photo to blob
+                    await blockBlob.UploadFromStreamAsync(model.ProfilePicture.OpenReadStream());
+                    
+                    /* Automatically confirm the childs email and set the profile url.*/
                     child.EmailConfirmed = true;
+                    child.PhotoUrl = string.Format("{0}", blockBlob.Uri.OriginalString);
                     _context.AccountUsers.Update(child);
                     _context.SaveChanges();
 
-                    
+
                     /* Associate the child with their parent. */
                     var PrimaryUserAssociation = new AccountAssociations() { PrimaryUserID = parent.Id, AssociatedUserID = child.Id, IsChild = true };
                     _context.AccountAssociations.Add(PrimaryUserAssociation);
-                   
+
 
                     _context.SaveChanges();
                 }
@@ -203,6 +253,8 @@ namespace ParentsRules.Controllers
                 return RedirectToAction("Index", "StatusCode", 500);
             }
         }
+
+
 
         private List<string> GetRelatedParents(string CurrentUserID)
         {
@@ -234,10 +286,11 @@ namespace ParentsRules.Controllers
                     MiddleName = rec.MiddleName,
                     LastName = rec.LastName,
                     Username = rec.UserName,
-                    Email = rec.Email
+                    Email = rec.Email,
+                    ProfilePhotoUrl = rec.PhotoUrl
                 };
             }
-            
+
             return View(child);
         }
 
@@ -253,10 +306,39 @@ namespace ParentsRules.Controllers
                 return NotFound();
             }
 
-            
+
             try
             {
                 var ChildUser = _context.AccountUsers.Where(a => a.Id == id).FirstOrDefault();
+                if(childrenViewModel.ProfilePicture != null)
+                {
+                    // Create a blob client instance.
+                    CloudBlobClient blobClient = _cloudStorageAccount.CreateCloudBlobClient();
+
+                    // Retrieve a reference to a container.
+                    CloudBlobContainer container = blobClient.GetContainerReference(_blobContainerName);
+
+                    // Create the container if it doesn't already exist.
+                    await container.CreateIfNotExistsAsync();
+                    await container.SetPermissionsAsync(new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Container });
+
+                    // Retrieve reference to a blob named "myblob".
+                    CloudBlockBlob blockBlob = container.GetBlockBlobReference(childrenViewModel.ProfilePicture.FileName);
+
+                    // Upload photo to blob
+                    await blockBlob.UploadFromStreamAsync(childrenViewModel.ProfilePicture.OpenReadStream());
+
+                    // Check to see if the child has a photo url or not.
+                    if (childrenViewModel.ProfilePhotoUrl != null)
+                    {
+                        CloudBlockBlob blobToBeDeleted = container.GetBlockBlobReference(Path.GetFileName(childrenViewModel.ProfilePhotoUrl));
+                        await blobToBeDeleted.DeleteIfExistsAsync();
+                    }
+
+                    /* Automatically confirm the childs email and set the profile url.*/
+                    ChildUser.PhotoUrl = string.Format("{0}", blockBlob.Uri.OriginalString);
+                }
+                
                 ChildUser.FirstName = childrenViewModel.FirstName;
                 ChildUser.MiddleName = childrenViewModel.MiddleName;
                 ChildUser.LastName = childrenViewModel.LastName;
@@ -268,7 +350,7 @@ namespace ParentsRules.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                    return NotFound();
+                return NotFound();
             }
 
 
@@ -306,24 +388,27 @@ namespace ParentsRules.Controllers
                     //A child needs to be deleted from the following tables: AccountUsers, AccountAssociations, UserChores and ChildrenWork.
                     //Delete child's current tasks from the ChildrenWork table
                     List<ChildrenWork> worklist = _context.ChildWorkList.Where(a => a.UserID == id).ToList<ChildrenWork>();
-                    if(worklist.Count > 0){
+                    if (worklist.Count > 0)
+                    {
                         _context.ChildWorkList.RemoveRange(worklist);
                     }
                     //delete Child user chores
                     List<UserChores> choresList = _context.UserChores.Where(a => a.UserID == id).ToList<UserChores>();
-                    if (choresList.Count > 0){
+                    if (choresList.Count > 0)
+                    {
                         _context.UserChores.RemoveRange(choresList);
                     }
                     //Delete a child from account associations table
                     List<AccountAssociations> accountAssociationList = _context.AccountAssociations.Where(a => a.AssociatedUserID == id).ToList<AccountAssociations>();
-                    if (accountAssociationList.Count > 0){
+                    if (accountAssociationList.Count > 0)
+                    {
                         _context.AccountAssociations.RemoveRange(accountAssociationList);
                     }
                     //Find the record to delete
                     var child = _context.AccountUsers.Where(a => a.Id == id).FirstOrDefault();
                     if (child != null)
                     {
-                        _context.AccountUsers.Remove(child);                       
+                        _context.AccountUsers.Remove(child);
                     }
                     else
                     {
@@ -332,7 +417,7 @@ namespace ParentsRules.Controllers
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Children));
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -353,7 +438,7 @@ namespace ParentsRules.Controllers
                 {
                     throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
                 }
-                
+
                 UserConformationRequests friendRequest = _context.UserConformationRequests.Where(a => a.RequestedUserID == user.Id && a.ID == id).FirstOrDefault();
                 if (friendRequest != null)
                 {

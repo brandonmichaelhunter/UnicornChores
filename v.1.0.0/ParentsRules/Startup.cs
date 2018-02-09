@@ -12,6 +12,8 @@ using ParentsRules.Data;
 using ParentsRules.Models;
 using ParentsRules.Services;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace ParentsRules
 {
@@ -50,12 +52,15 @@ namespace ParentsRules
             services.AddTransient<ISMSSender, SMSSender>();
             
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+
             //Retrieve the configuration settings for the SMSSender
             services.Configure<SMSServiceSettings>(Configuration.GetSection("SMSSettings"));
 
+            // Retrieve configuration settings for using storage account
+            services.Configure<AzureStorageSettings>(Configuration.GetSection("Data:Azure"));
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<ISMSSender, SMSSender>();
-
+            services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
             services.AddMvc();
         }
 

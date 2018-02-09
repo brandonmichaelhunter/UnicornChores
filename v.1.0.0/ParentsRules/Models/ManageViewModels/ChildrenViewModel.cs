@@ -1,10 +1,11 @@
 ﻿using ParentsRules.Models.AccountViewModels;
+using ParentsRules.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Microsoft.AspNetCore.Http;
 namespace ParentsRules.Models.ManageViewModels
 {
     public class ChildrenViewModel
@@ -44,5 +45,9 @@ namespace ParentsRules.Models.ManageViewModels
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+        
+        public Microsoft.AspNetCore.Http.IFormFile ProfilePicture { get; set; }
+        public string ProfilePhotoUrl { get; set; }
+        //public  MyProperty { get; set; }
     }
 }

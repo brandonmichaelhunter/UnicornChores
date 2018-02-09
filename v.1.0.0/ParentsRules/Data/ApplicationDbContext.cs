@@ -42,6 +42,6 @@ namespace ParentsRules.Data
         public DbSet<ParentsRules.Models.DashboardViewModels.DashboardViewModel> DashboardViewModel { get; set; }
         public DbSet<ParentsRules.Models.ManageViewModels.FriendViewModel> FriendViewModel { get; set; }
         public DbSet<ParentsRules.Models.ManageViewModels.FriendsRequestViewModel> FriendsRequestViewModel { get; set; }
-        public DbSet<ParentsRules.Models.ManageViewModels.ChildrenViewModel> ChildrenViewModel { get; set; }
+        //public DbSet<ParentsRules.Models.ManageViewModels.ChildrenViewModel> ChildrenViewModel { get; set; }
     }
 }
