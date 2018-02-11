@@ -17,5 +17,6 @@ namespace ParentsRules.Models
         public string IsChild { get; set; }
         public string PhoneNumber { get; set; }
         public string PhotoUrl { get; set; }
+        public string BGPageImage { get; set; }
     }
 }

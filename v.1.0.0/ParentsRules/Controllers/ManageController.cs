@@ -14,6 +14,8 @@ using ParentsRules.Models;
 using ParentsRules.Models.ManageViewModels;
 using ParentsRules.Services;
 using ParentsRules.Data;
+using System.IO;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ParentsRules.Controllers
 {
@@ -48,7 +50,24 @@ namespace ParentsRules.Controllers
 
         [TempData]
         public string StatusMessage { get; set; }
+        private List<SelectListItem> GetBackgroundImages ()
+        {
+            List<string> files = Directory.GetFiles("./Assets/bgpageimages").ToList();
+            //List<ChoreTypes> retList =
+            List<SelectListItem> retList = new List<SelectListItem>();
+            files.ForEach(delegate (string filePath)
+            {
+                var fileName = Path.GetFileName(filePath);
+                retList.Add(new SelectListItem() { Value = fileName, Text = fileName });
+            });
 
+            
+            retList.Insert(0, new SelectListItem() { Value = "", Text = "Select a Background Image", Selected = true });
+            retList.Insert(1, new SelectListItem() { Value = "-1", Text = "Select Default White Background", Selected = false });
+
+
+            return retList;
+        }
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -59,6 +78,9 @@ namespace ParentsRules.Controllers
                 {
                     throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
                 }
+                //
+                //Get a list user created chores
+                ViewBag.BackgroundImages = GetBackgroundImages();
 
                 var model = new IndexViewModel()
                 {
@@ -66,7 +88,8 @@ namespace ParentsRules.Controllers
                     Email = user.Email,
                     PhoneNumber = user.PhoneNumber,
                     IsEmailConfirmed = user.EmailConfirmed,
-                    StatusMessage = StatusMessage
+                    StatusMessage = StatusMessage,
+                    BGPageImage = user.BGPageImage
                 };
 
                 return View(model);
@@ -397,6 +420,31 @@ namespace ParentsRules.Controllers
            
         }
 
+        [HttpPost]
+        public async Task<IActionResult> SetBackgroundImage(IndexViewModel model)
+        {
+            try
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                }
+                ApplicationUser currentUser = _context.AccountUsers.Where(a => a.Id == user.Id).FirstOrDefault();
+                if(currentUser != null)
+                {
+                    currentUser.BGPageImage = (model.BGPageImage != "-1")? model.BGPageImage: "";
+                    _context.AccountUsers.Update(currentUser);
+                    await _context.SaveChangesAsync();
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(string.Format("{0} - Error Message: {1}", System.Reflection.MethodBase.GetCurrentMethod(), ex.Message));
+                return RedirectToAction("Index", "StatusCode", 500);
+            }
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SendVerificationEmail(IndexViewModel model)

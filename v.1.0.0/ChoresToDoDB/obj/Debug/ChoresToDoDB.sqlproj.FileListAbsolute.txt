@@ -1,0 +1,5 @@
+C:\Users\Brandon\Documents\GitHub\UnicornChores\v.1.0.0\ChoresToDoDB\bin\Debug\ChoresToDoDB.dacpac
+C:\Users\Brandon\Documents\GitHub\UnicornChores\v.1.0.0\ChoresToDoDB\obj\Debug\ChoresToDoDB.dll
+C:\Users\Brandon\Documents\GitHub\UnicornChores\v.1.0.0\ChoresToDoDB\obj\Debug\ChoresToDoDB.pdb
+C:\Users\Brandon\Documents\GitHub\UnicornChores\v.1.0.0\ChoresToDoDB\bin\Debug\ChoresToDoDB.dll
+C:\Users\Brandon\Documents\GitHub\UnicornChores\v.1.0.0\ChoresToDoDB\bin\Debug\ChoresToDoDB.pdb

@@ -14,6 +14,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Assets\bgpageimages\AndrewMccutchen.jpg" />
+    <Content Include="Assets\bgpageimages\Clemenson.png" />
+    <Content Include="Assets\bgpageimages\ClemsonTigers.png" />
+    <Content Include="Assets\bgpageimages\NasaGlobe.jpg" />
+    <Content Include="Assets\bgpageimages\Nasa_logo.png" />
+    <Content Include="Assets\bgpageimages\OuterSpace.jpg" />
+    <Content Include="Assets\bgpageimages\PlanetEarth.jpg" />
+    <Content Include="Assets\bgpageimages\SpaceShuttle.jpg" />
+    <Content Include="Assets\bgpageimages\Steelers-JuJu.jpg" />
+    <Content Include="Assets\bgpageimages\Steelers.jpg" />
+    <Content Include="Assets\bgpageimages\Steelers_AB.jpg" />
+    <Content Include="Assets\bgpageimages\Steelers_Bell.jpg" />
+    <Content Include="Assets\bgpageimages\Steelers_BigBen.jpg" />
     <Content Include="Assets\EmailConformation.html">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
@@ -38,6 +51,10 @@
     <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
 	<DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Assets\bgpageimages\" />
   </ItemGroup>
 
 </Project>

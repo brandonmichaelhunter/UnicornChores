@@ -10,6 +10,7 @@
 }
 <h4>@ViewData["Title"]</h4>
 @Html.Partial("_StatusMessage", Model.StatusMessage)
+
 <div class="row">
     <div class="col-md-6">
         <form method="post">
@@ -17,6 +18,11 @@
             <div class="form-group">
                 <label asp-for="Username"></label>
                 <input asp-for="Username" class="form-control" disabled="disabled" />
+            </div>
+            <div class="form-group">
+                <label asp-for="BGPageImage" class="control-label">Select A Background Image</label>
+                <select asp-for="BGPageImage" class="form-control" asp-items="@ViewBag.BackgroundImages"></select>
+                <button asp-action="SetBackgroundImage" class="btn btn-link">Set Your Background Image</button>
             </div>
             <div class="form-group @enableControl">
                 <label asp-for="Email"></label>

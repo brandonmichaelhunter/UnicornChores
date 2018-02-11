@@ -29,7 +29,7 @@ namespace ParentsRules.Models.ManageViewModels
         public string AssociatedUserFirstName { get; set; }
         [Display(Name = "Last Name")]
         public String AssociatedUserLastName { get; set; }
-
+        public string BGPageImage { get; set; }
         /* Stores a list users linked to current user. */
         public List<ApplicationUser> AssociatedUsers { get; set; }
     }
