@@ -52,13 +52,12 @@ namespace ParentsRules.Controllers
         public string StatusMessage { get; set; }
         private List<SelectListItem> GetBackgroundImages ()
         {
-            List<string> files = Directory.GetFiles("./Assets/bgpageimages").ToList();
+            List<PageManager> backgroundImages = _context.PageManager.ToList();
             //List<ChoreTypes> retList =
             List<SelectListItem> retList = new List<SelectListItem>();
-            files.ForEach(delegate (string filePath)
+            backgroundImages.ForEach(delegate (PageManager item)
             {
-                var fileName = Path.GetFileName(filePath);
-                retList.Add(new SelectListItem() { Value = fileName, Text = fileName });
+                retList.Add(new SelectListItem() { Value = item.BackgroundImageFileName, Text = item.BackgroundImageName });
             });
 
             

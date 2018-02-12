@@ -1,0 +1,44 @@
+﻿@model ParentsRules.Models.PageManagerViewModel
+
+@{
+    ViewData["Title"] = "Add a New Background Image";
+}
+
+<h4>Add a New Background Image</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="BackgroundImageName" class="control-label">Image Name</label>
+                <input asp-for="BackgroundImageName" class="form-control" />
+                <span asp-validation-for="BackgroundImageName" class="text-danger"></span>
+            </div>
+            <div class="form-group hide">
+                <label asp-for="BackgroundImageFileName" class="control-label">Upload an image</label>
+                <input asp-for="BackgroundImageFileName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="BackgroundImage" class="control-label">Upload an image</label>
+                <input asp-for="BackgroundImage" name="BackgroundImage" type="file" class="form-control" />
+            </div>
+            <div class="form-group hide">
+                <label asp-for="BackgroundImageFilePath" class="control-label"></label>
+                <input asp-for="BackgroundImageFilePath" class="form-control" />
+                <span asp-validation-for="BackgroundImageName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Add Background Image" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

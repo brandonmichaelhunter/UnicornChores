@@ -34,6 +34,7 @@ namespace ParentsRules.Data
             builder.Entity<AccountAssociations>().ToTable("AccountAssociations");
             builder.Entity<ChildrenWork>().ToTable("ChildrenWork");
             builder.Entity<CompletedChildrenWork>().ToTable("CompletedChildrenWork");
+            builder.Entity<PageManager>().ToTable("PageManager");
 
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
@@ -42,6 +43,7 @@ namespace ParentsRules.Data
         public DbSet<ParentsRules.Models.DashboardViewModels.DashboardViewModel> DashboardViewModel { get; set; }
         public DbSet<ParentsRules.Models.ManageViewModels.FriendViewModel> FriendViewModel { get; set; }
         public DbSet<ParentsRules.Models.ManageViewModels.FriendsRequestViewModel> FriendsRequestViewModel { get; set; }
+        public DbSet<ParentsRules.Models.PageManager> PageManager { get; set; }
         //public DbSet<ParentsRules.Models.ManageViewModels.ChildrenViewModel> ChildrenViewModel { get; set; }
     }
 }

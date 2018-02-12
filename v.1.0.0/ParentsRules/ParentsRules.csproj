@@ -54,7 +54,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Assets\bgpageimages\" />
+    <Folder Include="Assets\bgpageimages\">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Folder>
   </ItemGroup>
 
 </Project>

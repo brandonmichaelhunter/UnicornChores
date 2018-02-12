@@ -18,5 +18,6 @@ namespace ParentsRules.Models
         public string PhoneNumber { get; set; }
         public string PhotoUrl { get; set; }
         public string BGPageImage { get; set; }
+        public bool IsAdmin { get; set; }
     }
 }

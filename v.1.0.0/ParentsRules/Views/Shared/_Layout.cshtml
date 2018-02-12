@@ -13,6 +13,7 @@
     string urlPage = string.Empty ;
     bool isBackgroundPageSet = false;
     bool isChild = false;
+    bool isAdmin = false;
     if (SignInManager.IsSignedIn(User))
     {
         var user = await _userManager.GetUserAsync(User);
@@ -21,7 +22,7 @@
             isChild = true;
 
         }
-
+        isAdmin = user.IsAdmin;
         string backgroundImageFileName = user.BGPageImage;
         if (!string.IsNullOrEmpty(user.BGPageImage))
         {
@@ -105,7 +106,10 @@
                     else
                     {
                         <li><a asp-area="" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
-
+                    }
+                    if (isAdmin)
+                    {
+                        <li><a asp-controller="PageManagers" asp-action="Index">Page Manager</a></li>
                     }
 
                 }

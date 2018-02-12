@@ -1,0 +1,51 @@
+﻿@model IEnumerable<ParentsRules.Models.PageManagerViewModel>
+
+@{
+    ViewData["Title"] = "Page Configuration Manager";
+    string imageUrl = string.Empty;
+}
+
+<h2>Page Configuration Manager</h2>
+<hr style="display: block;margin-top: 0.5em;margin-bottom: 0.5em;margin-left: auto;margin-right: auto;border-style: inset;border-width: 1px;">
+<div class="container">
+    <div class="row">
+
+        <div class="col-sm-4"><a asp-action="Create">Add a New Background Image</a></div>
+    </div>
+</div><p>
+    
+</p>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    Image Display Name
+                </th>
+                <th>
+                    Background Image
+                </th>
+                
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.BackgroundImageName)
+            </td>
+            <td>
+                @{
+                    imageUrl = string.Format("/images/bgpageimages/{0}", item.BackgroundImageFileName);
+                }
+                <img src='@imageUrl' width="75" height="75" alt="test" style="border-radius: 50%;" />
+            </td>
+
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,54 @@
+﻿@model ParentsRules.Models.PageManagerViewModel
+
+@{
+    string title = string.Format("Editing {0} file", Model.BackgroundImageFileName);
+    ViewData["Title"] = title;
+}
+
+<h4>@title</h4>
+<hr />
+<div>
+    @{
+        string imageUrl = string.Format("/images/bgpageimages/{0}", Model.BackgroundImageFileName);
+    }
+    <img src='@imageUrl' width="75" height="75" alt="test" style="border-radius: 50%;" />
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit"  method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ID" />
+            <div class="form-group">
+                <label asp-for="BackgroundImageName" class="control-label">Image Name</label>
+                <input asp-for="BackgroundImageName" class="form-control" />
+                <span asp-validation-for="BackgroundImageName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BackgroundImage" class="control-label">Upload an image</label>
+                <input asp-for="BackgroundImage" name="BackgroundImage" type="file" class="form-control" />
+            </div>
+            <div class="form-group hidden">
+                <label asp-for="BackgroundImageFileName" class="control-label"></label>
+                <input asp-for="BackgroundImageFileName" class="form-control" />
+                <span asp-validation-for="BackgroundImageFileName" class="text-danger"></span>
+            </div>
+            <div class="form-group hidden">
+                <label asp-for="BackgroundImageFilePath" class="control-label"></label>
+                <input asp-for="BackgroundImageFilePath" class="form-control" />
+                <span asp-validation-for="BackgroundImageFilePath" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
